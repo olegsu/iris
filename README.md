@@ -39,7 +39,6 @@ destinations:
 
 integrations:
   - name: Report
-    event: PodCreated
     destination: 
     - prod
     filters:
