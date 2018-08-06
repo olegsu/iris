@@ -56,3 +56,14 @@ Kubernetes event that will pass all required filters will be passed to the desti
 Each destination is an api endpoint where the Kubernetes event will be sent
 ## Integrations
 Connecting between filters and destinations
+
+## Execute Codefresh pipelines
+With Iris, you can execute Codefresh pipelines.
+Add destinations with codefresh type:
+```yaml
+  - name: ExecuteCodefreshPipeline
+    type: Codefresh
+    pipeline: PIPELINE_NAME
+    cftoken: API_TOKEN
+    branch: master
+```

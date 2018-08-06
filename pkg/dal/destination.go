@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"k8s.io/api/core/v1"
 )
@@ -59,6 +60,9 @@ func execCodefresh(d *Destination, payload interface{}) {
 	postBody := &codefreshPostRequestBody{
 		Variables: make(map[string]string),
 	}
+	if d.Branch != "" {
+		postBody.Branch = d.Branch
+	}
 	var ev *v1.Event
 	b, _ := json.Marshal(payload)
 	json.Unmarshal(b, &ev)
@@ -69,7 +73,7 @@ func execCodefresh(d *Destination, payload interface{}) {
 	mJSON, _ := json.Marshal(postBody)
 	contentReader := bytes.NewReader(mJSON)
 
-	url := fmt.Sprintf("https://g.codefresh.io/api/pipelines/run/%s", d.Pipeline)
+	url := fmt.Sprintf("https://g.codefresh.io/api/pipelines/run/%s", url.QueryEscape(d.Pipeline))
 	fmt.Printf("Executing Codefresh destination\n")
 	fmt.Printf(string(mJSON))
 	req, _ := http.NewRequest("POST", url, contentReader)
@@ -91,4 +95,5 @@ type codefreshPostRequestBody struct {
 	Options   map[string]string `json:"options"`
 	Variables map[string]string `json:"variables"`
 	Contexts  []string          `json:"contexts"`
+	Branch    string            `json:"branch"`
 }
