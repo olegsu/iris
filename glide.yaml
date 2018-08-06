@@ -1,0 +1,22 @@
+package: github.com/olegsu/iris
+import:
+- package: github.com/gin-gonic/gin
+- package: github.com/urfave/cli
+- package: gopkg.in/yaml.v2
+- package: k8s.io/client-go
+  version: ^8.0.0
+  subpackages:
+  - tools/clientcmd
+  - kubernetes
+  - tools/cache
+- package: k8s.io/apimachinery
+  subpackages:
+  - pkg/fields
+  - pkg/apis/meta/v1
+- package: github.com/davecgh/go-spew
+  version: ~1.1.0
+  subpackages:
+  - spew
+- package: k8s.io/api
+  subpackages:
+  - core/v1
