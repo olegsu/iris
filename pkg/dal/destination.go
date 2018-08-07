@@ -87,7 +87,7 @@ func execCodefresh(d *Destination, payload interface{}) {
 	if resp.StatusCode == 200 {
 		fmt.Printf("Build ID: %s\n", string(body))
 	} else {
-		fmt.Printf("Error:\nStatus Code: $d\nBody: %s\n", resp.StatusCode, string(body))
+		fmt.Printf("Error:\nStatus Code: %d\nBody: %s\n", resp.StatusCode, string(body))
 	}
 }
 
