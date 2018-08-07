@@ -1,8 +1,17 @@
-FROM golang:latest as builder
+FROM golang:1.10-alpine3.8 as builder
+
 RUN mkdir -p /go/src/github.com/olegsu/iris
 WORKDIR /go/src/github.com/olegsu/iris
+
+RUN apk add --update make
+
 COPY . .
-RUN "./hack/build.sh"
+
+# Run tests
+RUN make test
+
+# Build binary
+RUN make build
 
 
 FROM alpine:3.6

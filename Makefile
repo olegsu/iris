@@ -8,4 +8,4 @@ build:
 	@CGO_ENABLED=0 go build -v -o "./dist/bin/iris" *.go
 
 test:
-	@./hack/test.sh
+	@sh ./hack/test.sh
