@@ -2,10 +2,8 @@ package dal
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 
-	yaml "gopkg.in/yaml.v2"
+	"github.com/olegsu/iris/pkg/util"
 )
 
 var dal *Dal
@@ -26,11 +24,8 @@ func NewDalFromFilePath(path string) *Dal {
 		dal = d
 		return dal
 	}
-	file, e := ioutil.ReadFile(path)
-	if e != nil {
-		os.Exit(1)
-	}
-	yaml.Unmarshal(file, d)
+	file := util.GetUtil().ReadFileOrDie(path)
+	util.GetUtil().UnmarshalOrDie(file, d)
 	dal = d
 	return dal
 }
