@@ -6,3 +6,6 @@ install:
 
 build:
 	@CGO_ENABLED=0 go build -v -o "./dist/bin/iris" *.go
+
+test:
+	@sh ./hack/test.sh

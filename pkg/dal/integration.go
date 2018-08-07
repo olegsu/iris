@@ -2,6 +2,7 @@ package dal
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"k8s.io/api/core/v1"
 )
@@ -39,8 +40,12 @@ func (i *Integration) Exec(obj interface{}) (bool, error) {
 	if result == true {
 		for index := 0; index < len(i.Destinations); index++ {
 			dest := i.Destinations[index]
-			destination := GetDal().GetDestinationByName(dest)
-			destination.Exec(obj)
+			destination, err := GetDal().GetDestinationByName(dest)
+			if err != nil {
+				fmt.Printf("Error: %s", err.Error())
+			} else {
+				destination.Exec(obj)
+			}
 		}
 	}
 	return false, nil

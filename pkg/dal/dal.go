@@ -46,12 +46,18 @@ func (dal *Dal) GetFilterByName(name string) (*Filter, error) {
 	return f, nil
 }
 
-func (dal *Dal) GetDestinationByName(name string) *Destination {
+func (dal *Dal) GetDestinationByName(name string) (*Destination, error) {
 	var d *Destination
+	if dal == nil {
+		return nil, fmt.Errorf("%s destination not found", name)
+	}
 	for index := 0; index < len(dal.Destinations); index++ {
 		if dal.Destinations[index].Name == name {
 			d = &dal.Destinations[index]
 		}
 	}
-	return d
+	if d == nil {
+		return nil, fmt.Errorf("%s destination not found", name)
+	}
+	return d, nil
 }
