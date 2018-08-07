@@ -5,6 +5,8 @@
 `In Greek mythology, Iris is the personification of the rainbow and messenger of the gods.`
 
 
+[![Codefresh build status]( https://g.codefresh.io/api/badges/pipeline/olegs-codefresh/olegsu%2Firis%2Firis?branch=master&type=cf-2)]( https://g.codefresh.io/repositories/olegsu/iris/builds?filter=trigger:build;branch:master;service:5b69b8145904b871b671a6cf~iris)
+
 Easily configure webhooks on Kubernets events using highly customize filters
 
 * This project is not stable yet and may be changed anytime without any notice.
