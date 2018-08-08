@@ -11,6 +11,9 @@ import (
 func CreateApplication() *cli.App {
 	app := cli.NewApp()
 	app.Name = "Iris"
+	app.Email = "oleg2807@gmail.com"
+	app.Description = "Watch on Kubernetes event, filter and send them as standard wehbook you any system"
+	app.Version = "0.0.1"
 	setupCommands(app)
 	return app
 }
