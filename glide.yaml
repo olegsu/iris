@@ -9,6 +9,7 @@ import:
   - tools/clientcmd
   - kubernetes
   - tools/cache
+  - rest
 - package: k8s.io/apimachinery
   subpackages:
   - pkg/fields

@@ -5,8 +5,22 @@ import (
 	"github.com/olegsu/iris/pkg/server"
 )
 
-func CreateApp(irisconfig string, kubeconfig string) {
-	dal.NewDalFromFilePath(irisconfig)
-	go dal.GetClientset(kubeconfig).StartWatching()
+type ApplicationOptions struct {
+	IrisPath       string
+	KubeconfigPath string
+	InCluster      bool
+}
+
+func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool) *ApplicationOptions {
+	return &ApplicationOptions{
+		IrisPath:       irisconfig,
+		KubeconfigPath: kubeconfig,
+		InCluster:      incluster,
+	}
+}
+
+func CreateApp(config *ApplicationOptions) {
+	dal.NewDalFromFilePath(config.IrisPath)
+	go dal.GetClientset(config.KubeconfigPath, config.InCluster).StartWatching()
 	server.StartServer()
 }

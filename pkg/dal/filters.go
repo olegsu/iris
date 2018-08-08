@@ -55,7 +55,7 @@ func (f *Filter) Apply(data interface{}) (bool, error) {
 		}
 		return res, nil
 	} else if f.Type == "labels" {
-		res, err := GetClientset("").FindResourceByLabels(data, f.Labels)
+		res, err := GetClientset("", true).FindResourceByLabels(data, f.Labels)
 		if err != nil {
 			return false, err
 		}

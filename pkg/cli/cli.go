@@ -30,9 +30,14 @@ func setupCommands(app *cli.App) {
 					Usage: "Iris yaml config file",
 				},
 				cli.StringFlag{
-					Name:  "kube-config",
-					Usage: "Path to kube-config file",
-					Value: fmt.Sprintf("%s/.kube/config", os.Getenv("HOME")),
+					Name:   "kube-config",
+					Usage:  "Path to kube-config file",
+					EnvVar: "KUBECONFIG",
+					Value:  fmt.Sprintf("%s/.kube/config", os.Getenv("HOME")),
+				},
+				cli.BoolFlag{
+					Name:  "in-cluster",
+					Usage: "Set when running inside a cluster. NOTE: will ignore --kube-config flag",
 				},
 			},
 		},
@@ -40,7 +45,8 @@ func setupCommands(app *cli.App) {
 }
 
 func run(c *cli.Context) error {
+	config := app.NewApplicationOptions(c.String("iris-file"), c.String("kube-config"), c.Bool("in-cluster"))
 	fmt.Println("Started")
-	app.CreateApp(c.String("iris-file"), c.String("kube-config"))
+	app.CreateApp(config)
 	return nil
 }

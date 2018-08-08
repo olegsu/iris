@@ -1,5 +1,5 @@
-hash: ddaae54054008b4be0f5b2344b880c3dc54aeffcc3c61ffb75441e768d48a3d4
-updated: 2018-08-06T06:44:35.218114+03:00
+hash: 0571670239f56250ce3d79f4ecdd6ffeba1500dadc966625ed0d08e2e3aa15da
+updated: 2018-08-08T16:14:11.066215+03:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
@@ -67,6 +67,8 @@ imports:
   - codec
 - name: github.com/urfave/cli
   version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: github.com/yalp/jsonpath
+  version: 5cc68e5049a040829faef3a44c00ec4332f6dec7
 - name: golang.org/x/crypto
   version: 49796115aa4b964c318aad4f3084fdb41e9aa067
   subpackages:
@@ -75,13 +77,10 @@ imports:
   version: 1c05540f6879653db88113bc4a2b70aec4bd491f
   subpackages:
   - context
-  - html
-  - html/atom
   - http2
   - http2/hpack
   - idna
   - lex/httplex
-  - websocket
 - name: golang.org/x/sys
   version: 95c6576299259db960f6c5b9b69ea52422860fce
   subpackages:

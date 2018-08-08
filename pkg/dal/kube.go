@@ -9,6 +9,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -19,13 +20,20 @@ type KubeManager struct {
 	Clientset *kubernetes.Clientset
 }
 
-func GetClientset(kubeconfig string) *KubeManager {
+func GetClientset(kubeconfig string, incluster bool) *KubeManager {
 	if kube != nil {
 		return kube
 	}
 	kube = &KubeManager{}
-	fmt.Printf("Connecting to cluster from kubeconfig %s", kubeconfig)
-	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	var config *rest.Config
+	var err error
+	if incluster == true {
+		fmt.Printf("Running from in cluster")
+		config, err = rest.InClusterConfig()
+	} else {
+		fmt.Printf("Connecting to cluster from kubeconfig %s", kubeconfig)
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
+	}
 	if err != nil {
 		panic(err.Error())
 	}
