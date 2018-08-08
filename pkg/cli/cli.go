@@ -37,7 +37,16 @@ func setupCommands(app *cli.App) {
 				},
 				cli.BoolFlag{
 					Name:  "in-cluster",
-					Usage: "Set when running inside a cluster. NOTE: will ignore --kube-config flag",
+					Usage: "Set when running inside a cluster. NOTE: This option will ignore --kube-config flag",
+				},
+				cli.StringFlag{
+					Name:  "iris-cm",
+					Usage: "Name of configmap with iris config yaml. NOTE: This options will ignore --iris-file path",
+				},
+				cli.StringFlag{
+					Name:  "iris-cm-namespace",
+					Usage: "Namespace in which to look the configmap",
+					Value: "default",
 				},
 			},
 		},
@@ -45,7 +54,13 @@ func setupCommands(app *cli.App) {
 }
 
 func run(c *cli.Context) error {
-	config := app.NewApplicationOptions(c.String("iris-file"), c.String("kube-config"), c.Bool("in-cluster"))
+	config := app.NewApplicationOptions(
+		c.String("iris-file"),
+		c.String("kube-config"),
+		c.Bool("in-cluster"),
+		c.String("iris-cm"),
+		c.String("iris-cm-namespace"),
+	)
 	fmt.Println("Started")
 	app.CreateApp(config)
 	return nil

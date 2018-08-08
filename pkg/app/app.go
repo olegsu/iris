@@ -6,16 +6,20 @@ import (
 )
 
 type ApplicationOptions struct {
-	IrisPath       string
-	KubeconfigPath string
-	InCluster      bool
+	IrisPath               string
+	KubeconfigPath         string
+	InCluster              bool
+	IrisConfigMapName      string
+	IrisConfigMapNamespace string
 }
 
-func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool) *ApplicationOptions {
+func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool, irisCmName string, irisCmNamespace string) *ApplicationOptions {
 	return &ApplicationOptions{
-		IrisPath:       irisconfig,
-		KubeconfigPath: kubeconfig,
-		InCluster:      incluster,
+		IrisPath:               irisconfig,
+		KubeconfigPath:         kubeconfig,
+		InCluster:              incluster,
+		IrisConfigMapName:      irisCmName,
+		IrisConfigMapNamespace: irisCmNamespace,
 	}
 }
 
