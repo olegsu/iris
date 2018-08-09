@@ -2,3 +2,4 @@ iris
 dist
 example.*
 Dockerfile
+kube-resourecs
