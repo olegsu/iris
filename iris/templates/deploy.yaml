@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name  | quote }}
+    heritage: {{ .Release.Service  | quote }}
+    version: {{ .Values.image.tag | quote }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - env:
+        - name: IRIS_CONFIGMAP_NAME
+          value: {{ template "fullname" . }}
+        - name: IRIS_IN_CLUSTER
+          value: "true"
+        - name: IRIS_CONFIGMAP_NAMESPACE
+          value: {{ .Values.namespace }}
+        name: {{ template "fullname" . }}
+        command:
+        - "iris"
+        - "run"
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}

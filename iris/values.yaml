@@ -1,0 +1,7 @@
+image:
+    name: olsynt/iris
+    tag: master
+
+namespace: iris
+
+imagePullPolicy: IfNotPresent

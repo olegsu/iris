@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  iris: |
+
+{{- if .Values.filters }}
+    filters:
+{{ toYaml .Values.filters | indent 8 }}
+{{- end }}
+
+{{- if .Values.destinations }}
+    destinations:
+{{ toYaml .Values.destinations | indent 8 }}
+{{- end }}
+
+{{- if .Values.integrations }}
+    integrations:
+{{ toYaml .Values.integrations | indent 8 }}
+{{- end }}
+
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
