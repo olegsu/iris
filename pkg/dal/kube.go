@@ -28,10 +28,10 @@ func GetClientset(kubeconfig string, incluster bool) *KubeManager {
 	var config *rest.Config
 	var err error
 	if incluster == true {
-		fmt.Printf("Running from in cluster")
+		fmt.Printf("Running from in cluster\n")
 		config, err = rest.InClusterConfig()
 	} else {
-		fmt.Printf("Connecting to cluster from kubeconfig %s", kubeconfig)
+		fmt.Printf("Connecting to cluster from kubeconfig %s\n", kubeconfig)
 		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
 	}
 	if err != nil {
@@ -77,6 +77,15 @@ func (k *KubeManager) StartWatching() {
 	for {
 		time.Sleep(time.Second)
 	}
+}
+
+func GetConfigmapData(configmapName string, configmapNamespace string) (string, error) {
+	cm, err := kube.Clientset.CoreV1().ConfigMaps(configmapNamespace).Get(configmapName, metav1.GetOptions{})
+	if err != nil {
+		return "", err
+	}
+	stringAsData := cm.Data["iris"]
+	return stringAsData, nil
 }
 
 func (k *KubeManager) FindResourceByLabels(obj interface{}, labels map[string]string) (bool, error) {

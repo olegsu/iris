@@ -24,7 +24,12 @@ func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool,
 }
 
 func CreateApp(config *ApplicationOptions) {
-	dal.NewDalFromFilePath(config.IrisPath)
-	go dal.GetClientset(config.KubeconfigPath, config.InCluster).StartWatching()
+	cs := dal.GetClientset(config.KubeconfigPath, config.InCluster)
+	if config.IrisConfigMapName != "" {
+		dal.NewDalFromConfigMap(config.IrisConfigMapName, config.IrisConfigMapNamespace)
+	} else {
+		dal.NewDalFromFilePath(config.IrisPath)
+	}
+	go cs.StartWatching()
 	server.StartServer()
 }

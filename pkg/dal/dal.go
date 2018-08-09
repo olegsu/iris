@@ -19,6 +19,9 @@ func GetDal() *Dal {
 }
 
 func NewDalFromFilePath(path string) *Dal {
+	if dal != nil {
+		return dal
+	}
 	d := &Dal{}
 	if path == "" {
 		dal = d
@@ -26,6 +29,22 @@ func NewDalFromFilePath(path string) *Dal {
 	}
 	file := util.GetUtil().ReadFileOrDie(path)
 	util.GetUtil().UnmarshalOrDie(file, d)
+	dal = d
+	return dal
+}
+
+func NewDalFromConfigMap(configmapName string, configmapNamespace string) *Dal {
+	if dal != nil {
+		return dal
+	}
+	d := &Dal{}
+	res, err := GetConfigmapData(configmapName, configmapNamespace)
+	if err != nil {
+		dal = d
+		return d
+	}
+	bytes := []byte(res)
+	util.GetUtil().UnmarshalOrDie(bytes, d)
 	dal = d
 	return dal
 }
