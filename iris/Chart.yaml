@@ -1,0 +1,15 @@
+apiVersion: v1
+version: 0.0.1
+description: Watch on Kubernetes event, filter and send them as standard wehbook you any system
+name: iris
+keywords:
+- kubernetes
+- webhook
+- codefresh
+- slack
+icon: https://github.com/olegsu/iris/raw/master/Iris.jpg
+sources:
+- https://github.com/olegsu/iris
+maintainers:
+- name: Oleg Sucharevich
+  email: oleg2807@gmail.com

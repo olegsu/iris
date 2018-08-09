@@ -11,6 +11,13 @@ Easily configure webhooks on Kubernets events using highly customize filters
 
 * This project is not stable yet and may be changed anytime without any notice.
 
+## Run in cluster
+### Using Helm
+* clone or fork this repository
+* create your iris.yaml file
+* install chart from local directory `helm install ./iris --values ./iris.yaml`
+* by default the chart will be installed into namespace `iris`, see default values to overwrite it
+
 ## Build
 ### Locally
 * Limitations:
