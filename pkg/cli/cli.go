@@ -26,8 +26,9 @@ func setupCommands(app *cli.App) {
 			Action: run,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "iris-file",
-					Usage: "Iris yaml config file",
+					Name:   "iris-file",
+					Usage:  "Iris yaml config file",
+					EnvVar: "IRIS_FILE",
 				},
 				cli.StringFlag{
 					Name:   "kube-config",
@@ -36,17 +37,20 @@ func setupCommands(app *cli.App) {
 					Value:  fmt.Sprintf("%s/.kube/config", os.Getenv("HOME")),
 				},
 				cli.BoolFlag{
-					Name:  "in-cluster",
-					Usage: "Set when running inside a cluster. NOTE: This option will ignore --kube-config flag",
+					Name:   "in-cluster",
+					Usage:  "Set when running inside a cluster. NOTE: This option will ignore --kube-config flag",
+					EnvVar: "IRIS_IN_CLUSTER",
 				},
 				cli.StringFlag{
-					Name:  "iris-cm",
-					Usage: "Name of configmap with iris config yaml. NOTE: This options will ignore --iris-file path",
+					Name:   "iris-cm",
+					Usage:  "Name of configmap with iris config yaml. NOTE: This options will ignore --iris-file path",
+					EnvVar: "IRIS_CONFIGMAP_NAME",
 				},
 				cli.StringFlag{
-					Name:  "iris-cm-namespace",
-					Usage: "Namespace in which to look the configmap",
-					Value: "default",
+					Name:   "iris-cm-namespace",
+					Usage:  "Namespace in which to look the configmap",
+					Value:  "default",
+					EnvVar: "IRIS_CONFIGMAP_NAMESPACE",
 				},
 			},
 		},
