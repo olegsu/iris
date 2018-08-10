@@ -2,3 +2,4 @@ dist
 example.*
 Dockerfile
 kube-resourecs
+.envrc
