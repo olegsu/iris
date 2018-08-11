@@ -1,3 +1,4 @@
 dist
 example.*
 kube-resources
+.envrc

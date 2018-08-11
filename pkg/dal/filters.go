@@ -48,8 +48,8 @@ func (f *Filter) Apply(data interface{}) (bool, error) {
 			return false, err
 		}
 		return res, nil
-	} else if f.Type == "OR" {
-		res, err := applyOrFilter(f, data)
+	} else if f.Type == "any" {
+		res, err := applyAnyFilter(f, data)
 		if err != nil {
 			return false, err
 		}
@@ -64,8 +64,8 @@ func (f *Filter) Apply(data interface{}) (bool, error) {
 	return false, nil
 }
 
-func applyOrFilter(filter *Filter, data interface{}) (bool, error) {
-	fmt.Printf("Or filter\n")
+func applyAnyFilter(filter *Filter, data interface{}) (bool, error) {
+	fmt.Printf("Any filter\n")
 	var res = false
 	for index := 0; index < len(filter.Filters); index++ {
 		filter, err := dal.GetFilterByName(filter.Filters[index])

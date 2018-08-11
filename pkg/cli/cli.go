@@ -13,7 +13,7 @@ func CreateApplication() *cli.App {
 	app.Name = "Iris"
 	app.Email = "oleg2807@gmail.com"
 	app.Description = "Watch on Kubernetes events, filter and send them as standard wehbook to any system"
-	app.Version = "0.0.1"
+	app.Version = os.Getenv("IRIS_VERSION")
 	setupCommands(app)
 	return app
 }
