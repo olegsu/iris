@@ -21,5 +21,5 @@ updateChartVersion(){
 
 v=$(getChartVersion)
 echo "Setting version to be $v"
-updateChartVersion
+updateChartVersion $v
 cat $CF_VOLUME_PATH/iris/iris/Chart.yaml
