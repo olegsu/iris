@@ -14,4 +14,4 @@ getChartVersion(){
     echo $version
 }
 
-echo $getChartVersion
+getChartVersion
