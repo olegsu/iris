@@ -22,4 +22,4 @@ updateChartVersion(){
 v=$(getChartVersion)
 echo "Setting version to be $v"
 updateChartVersion $v
-cat $CF_VOLUME_PATH/iris/iris/Chart.yaml
+cf_export IRIS_VERSION=$v
