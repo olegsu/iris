@@ -15,7 +15,7 @@ getChartVersion(){
 
 updateChartVersion(){
     version=$1
-    yq '.version = env.PACKAGE_VERSION' $CF_VOLUME_PATH/iris/iris/Chart.yaml | yq -y '.sources[.sources | length] = env.CF_COMMIT_URL' --yaml-output > $CF_VOLUME_PATH/Chart.new.yaml
+    yq --arg version "$version" '.version = $version' $CF_VOLUME_PATH/iris/iris/Chart.yaml | yq -y '.sources[.sources | length] = env.CF_COMMIT_URL' --yaml-output > $CF_VOLUME_PATH/Chart.new.yaml
     mv $CF_VOLUME_PATH/Chart.new.yaml $CF_VOLUME_PATH/iris/iris/Chart.yaml
 }
 
