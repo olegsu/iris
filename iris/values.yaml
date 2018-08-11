@@ -1,6 +1,6 @@
 image:
     name: olsynt/iris
-    tag: master
+    tag: latest
 
 namespace: iris
 
