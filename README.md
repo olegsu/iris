@@ -156,3 +156,11 @@ Add destinations with Codefresh type:
 
 ## Integrations
 Connecting between filters and destinations
+```yaml
+integrations:
+  - name: Report
+    destination:
+    - {{name of destination}}
+    filters:
+    - {{name of filters to apply}}
+```
