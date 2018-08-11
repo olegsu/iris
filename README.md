@@ -7,6 +7,21 @@
 
 <sub>**_In Greek mythology, Iris is the personification of the rainbow and messenger of the gods._**</sub>
 
+- [IRIS](#iris)
+    - [Run in cluster](#run-in-cluster)
+        - [Using Helm](#using-helm)
+    - [Build](#build)
+    - [Filters](#filters)
+        - [Reason](#reason)
+        - [Namespace](#namespace)
+        - [JSONPath](#jsonpath)
+        - [Labels](#labels)
+        - [Any](#any)
+    - [Destinations](#destinations)
+        - [Default](#default)
+        - [Codefresh](#codefresh)
+    - [Integrations](#integrations)
+
 Easily configure webhooks on Kubernets events using highly customize filters
 
 * This project is not stable yet and may be changed anytime without any notice.
@@ -19,12 +34,12 @@ Easily configure webhooks on Kubernets events using highly customize filters
 * by default the chart will be installed into namespace `iris`, see default values to overwrite it
 
 ## Build
-### Locally
+* clone or fork this repo
+* `make install`
+* `make build`
 * Limitations:
   * Execute out of cluster `iris run --help`
   * Execute on non GCP cluster
-* `make install`
-* `make build`
 
 Quick example:
 
@@ -58,7 +73,7 @@ Set of rules that will be applied on each [Kubernetes event](https://github.com/
 Kubernetes event that will pass all required filters will be passed to the destination to be reported  
 Types of filters:
 ### Reason
-Reason filter is a syntactic sugar for `jsonpath` event with `path: $.path` and `value: {{reason}}`
+Reason filter is a syntactic sugar for [JSONPath](#jsonpath) filter with `path: $.reason` and `value: {{reason}}`
 ```yaml
 filters:
   - name: PodScheduled
@@ -66,7 +81,7 @@ filters:
 ```
 
 ### Namespace
-Namespace filter is a syntactic sugar for `jsonpath` event with `path: $.metadata.namespace` and `value: {{reason}}`
+Namespace filter is a syntactic sugar for [JSONPath](#jsonpath) filter with `path: $.metadata.namespace` and `value: {{reason}}`
 ```yaml
 filters:
   - name: FromDefaultNamespace
@@ -125,7 +140,7 @@ destinations:
     url: https://webhook.site
     secret: SECRET
 ```
-#### Codefresh
+### Codefresh
 With Iris, you can execute Codefresh pipelines.
 Add destinations with Codefresh type:
 * name: pipeline full name can be found easily using [Codefresh CLI](https://codefresh-io.github.io/cli/) - `codefresh get pipelines`
