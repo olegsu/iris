@@ -61,7 +61,7 @@ destinations:
 
 integrations:
   - name: Report
-    destination: 
+    destinations: 
     - prod
     filters:
     - MatchPodKind
@@ -159,7 +159,7 @@ Connecting between filters and destinations
 ```yaml
 integrations:
   - name: Report
-    destination:
+    destinations:
     - {{name of destination}}
     filters:
     - {{name of filters to apply}}
