@@ -1,8 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: iris-role
-  namespace: iris
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
 rules:
   - apiGroups: [""]
     verbs: ["get", "list", "watch"]
@@ -12,13 +12,13 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: iris-role-rolebinding
-  namespace: iris
+  name: {{ template "fullname" . }}
+  namespace: {{ .Values.namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: iris-role
+  name: {{ template "fullname" . }}
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: iris
+  namespace: {{ .Values.namespace }}
