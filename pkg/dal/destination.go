@@ -81,7 +81,7 @@ func execSlackWebHook(d *Destination, payload interface{}) {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	if string(body) == "ok" {
-		fmt.Printf("Execute Slack POST Success.")
+		fmt.Printf("Execute Slack POST Success.\n")
 	} else {
 		fmt.Printf("Error:\nStatus Code: %d\nBody: %s\n", resp.StatusCode, string(body))
 	}
