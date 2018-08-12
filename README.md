@@ -22,7 +22,7 @@
         - [Codefresh](#codefresh)
     - [Integrations](#integrations)
 
-Easily configure webhooks on Kubernets events using highly customize filters
+Easily configure webhooks on Kubernetes events using highly customizable filters
 
 * This project is not stable yet and may be changed anytime without any notice.
 
