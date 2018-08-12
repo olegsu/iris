@@ -40,6 +40,8 @@ func (d *Destination) Exec(payload interface{}) {
 	fmt.Printf("Executing destination %s\n", d.Name)
 	if d.Type == "" {
 		execDefault(d, payload)
+	} else if d.Type == "SlackWebHook" {
+		execSlackWebHook(d, payload)
 	} else if d.Type == "Codefresh" {
 		execCodefresh(d, payload)
 	}
@@ -54,6 +56,35 @@ func execDefault(d *Destination, payload interface{}) {
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	client.Do(req)
+}
+
+func execSlackWebHook(d *Destination, payload interface{}) {
+	fmt.Printf("Executing SlackWebHook destination to %s\n", d.URL)
+	pJSON, err := json.MarshalIndent(payload, "", "   ")
+	if err != nil {
+		fmt.Println(err)
+	}
+	var slackPayload = map[string]interface{}{"text": string(pJSON)}
+	mJSON, err := json.Marshal(slackPayload)
+	if err != nil {
+		fmt.Println(err)
+	}
+	contentReader := bytes.NewReader(mJSON)
+	req, err := http.NewRequest("POST", d.URL, contentReader)
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Set("X-IRIS-HMAC", getHmac(d.Secret, mJSON))
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	if string(body) == "ok" {
+		fmt.Printf("Execute Slack POST Success.\n")
+	} else {
+		fmt.Printf("Error:\nStatus Code: %d\nBody: %s\n", resp.StatusCode, string(body))
+	}
 }
 
 func execCodefresh(d *Destination, payload interface{}) {
