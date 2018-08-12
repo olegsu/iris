@@ -1,4 +1,5 @@
 apiVersion: v1
+version: 0.0.2
 description: Watch on Kubernetes event, filter and send them as standard wehbook you any system
 name: iris
 keywords:
