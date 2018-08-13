@@ -65,7 +65,6 @@ func run(c *cli.Context) error {
 		c.String("iris-cm"),
 		c.String("iris-cm-namespace"),
 	)
-	fmt.Println("Started")
 	app.CreateApp(config)
 	return nil
 }
