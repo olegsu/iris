@@ -41,12 +41,12 @@ func (d *Destination) Exec(payload interface{}) {
 	if d.Type == "" {
 		err := execDefault(d, payload)
 		if err != nil {
-			fmt.Printf("Error: %s\n", d.Name)
+			fmt.Printf("Error: %s\n", err)
 		}
 	} else if d.Type == "Codefresh" {
 		err := execCodefresh(d, payload)
 		if err != nil {
-			fmt.Printf("Error: %s\n", d.Name)
+			fmt.Printf("Error: %s\n", err)
 		}
 	}
 }
