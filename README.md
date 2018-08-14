@@ -39,7 +39,6 @@ $ cd iris
 2. create your iris.yaml file
 
 ```
-$ #for exmaple...
 $ cat << EOF > ./iris.yaml
 filters:
   - name: MatchIrisNamespace
@@ -115,7 +114,7 @@ spec:
   selector:
     app: webhook-pod
 EOF
-$ kubectl apply webhook-pod.yaml
+$ kubectl apply -f webhook-pod.yaml
 ```
 
 And `kubectl logs *<your pods>* -n iris`  
