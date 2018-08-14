@@ -52,7 +52,7 @@ func NewDalFromConfigMap(configmapName string, configmapNamespace string) *Dal {
 func (dal *Dal) GetFilterByName(name string) (Ifilter, error) {
 	var f Ifilter
 	if dal == nil {
-		return nil, fmt.Errorf("No filters", name)
+		return nil, fmt.Errorf("No filters %s", name)
 	}
 	for index := 0; index < len(dal.Filters); index++ {
 		filterName := dal.Filters[index].GetName()

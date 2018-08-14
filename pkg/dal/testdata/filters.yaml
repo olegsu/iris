@@ -1,0 +1,4 @@
+filters:
+  - name: OnlyKillingPods
+    type: reason
+    reason: Killing
