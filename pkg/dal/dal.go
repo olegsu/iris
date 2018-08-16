@@ -19,36 +19,6 @@ func GetDal() *Dal {
 	return dal
 }
 
-func NewDalFromFilePath(path string) *Dal {
-	if dal != nil {
-		return dal
-	}
-	d := &Dal{}
-	if path == "" {
-		dal = d
-		return dal
-	}
-	file := util.GetUtil().ReadFileOrDie(path)
-
-	dal = createDalFromBytes(file)
-	return dal
-}
-
-func NewDalFromConfigMap(configmapName string, configmapNamespace string) *Dal {
-	if dal != nil {
-		return dal
-	}
-	d := &Dal{}
-	res, err := GetConfigmapData(configmapName, configmapNamespace)
-	if err != nil {
-		dal = d
-		return d
-	}
-	bytes := []byte(res)
-	dal = createDalFromBytes(bytes)
-	return dal
-}
-
 func (dal *Dal) GetFilterByName(name string) (Ifilter, error) {
 	var f Ifilter
 	if dal == nil {
@@ -82,7 +52,7 @@ func (dal *Dal) GetDestinationByName(name string) (IDestination, error) {
 	return d, nil
 }
 
-func createDalFromBytes(bytes []byte) *Dal {
+func CreateDalFromBytes(bytes []byte) *Dal {
 	d := &Dal{}
 	var data map[string][]map[string]interface{}
 	util.GetUtil().UnmarshalOrDie(bytes, &data)
@@ -100,7 +70,7 @@ func createDalFromBytes(bytes []byte) *Dal {
 		util.GetUtil().MapToObjectOrDie(integration, i)
 		d.Integrations = append(d.Integrations, i)
 	}
-
+	dal = d
 	return d
 }
 
