@@ -2,3 +2,5 @@ dist
 example.*
 kube-resources
 .envrc
+.vscode
+.cover
