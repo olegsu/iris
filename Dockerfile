@@ -10,8 +10,9 @@ ARG CODECOV_BASH_URL=https://codecov.io/bash
 # set Codecov expected env
 ARG VCS_COMMIT_ID
 ARG VCS_BRANCH_NAME
-
-RUN env
+ARG VCS_SLUG
+ARG CI_BUILD_URL
+ARG CI_BUILD_ID
 
 RUN mkdir -p /go/src/github.com/olegsu/iris
 WORKDIR /go/src/github.com/olegsu/iris
