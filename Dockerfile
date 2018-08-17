@@ -1,14 +1,25 @@
 FROM golang:1.10-alpine3.8 as builder
 
+# Add basic tools
+RUN apk add --no-cache --update curl bash make git
+
+# upload coverage reports to Codecov.io: pass CODECOV_TOKEN as build-arg
+ARG CODECOV_TOKEN
+# default codecov bash uploader
+ARG CODECOV_BASH_URL=https://codecov.io/bash
+# set Codecov expected env
+ARG VCS_COMMIT_ID
+ARG VCS_BRANCH_NAME
+
 RUN mkdir -p /go/src/github.com/olegsu/iris
 WORKDIR /go/src/github.com/olegsu/iris
-
-RUN apk add --update make
 
 COPY . .
 
 # Run tests
 RUN make test
+# Report coverage
+RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
 
 # Build binary
 RUN make build
