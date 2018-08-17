@@ -48,7 +48,7 @@ func GetClientset(kubeconfig string, incluster bool) *KubeManager {
 
 func onAdd(obj interface{}, cnf *Dal) {
 	for index := 0; index < len(cnf.Integrations); index++ {
-		go (&cnf.Integrations[index]).Exec(obj)
+		go (cnf.Integrations[index]).Exec(obj)
 	}
 }
 
@@ -97,7 +97,6 @@ func (k *KubeManager) FindResourceByLabels(obj interface{}, labels map[string]st
 			selector = fmt.Sprintf("%s,%s=%s", selector, k, v)
 		}
 	}
-	fmt.Printf("Build selector query: %s\n", selector)
 	var ev *v1.Event
 	bytes, err := json.Marshal(obj)
 	json.Unmarshal(bytes, &ev)
@@ -108,6 +107,5 @@ func (k *KubeManager) FindResourceByLabels(obj interface{}, labels map[string]st
 	if err != nil {
 		return false, err
 	}
-	fmt.Printf("Found n: %d pods\n", len(pods.Items))
 	return len(pods.Items) > 0, nil
 }
