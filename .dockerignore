@@ -4,3 +4,4 @@ Dockerfile
 kube-resourecs
 .envrc
 .vscode
+.cover
