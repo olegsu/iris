@@ -11,6 +11,8 @@ ARG CODECOV_BASH_URL=https://codecov.io/bash
 ARG VCS_COMMIT_ID
 ARG VCS_BRANCH_NAME
 
+RUN env
+
 RUN mkdir -p /go/src/github.com/olegsu/iris
 WORKDIR /go/src/github.com/olegsu/iris
 
