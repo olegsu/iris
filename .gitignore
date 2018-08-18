@@ -4,3 +4,4 @@ kube-resources
 .envrc
 .vscode
 .cover
+.examples
