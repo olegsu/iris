@@ -3,6 +3,7 @@ package reader
 import (
 	"fmt"
 
+	"github.com/olegsu/iris/pkg/kube"
 	"github.com/olegsu/iris/pkg/util/reader/configmap"
 	"github.com/olegsu/iris/pkg/util/reader/file"
 )
@@ -32,15 +33,15 @@ func (i *processor) Process() ([]byte, error) {
 }
 
 // NewProcessor - crete new processor based on the len of the args
-func NewProcessor(args []string, obj interface{}) (IRISProcessor, error) {
+func NewProcessor(args []string, k kube.Kube) (IRISProcessor, error) {
 	if len(args) == 1 {
 		return &processor{
-			fileReader: file.NewFileReader(),
+			fileReader: file.NewFileReader(k),
 			args:       args,
 		}, nil
 	} else if len(args) == 2 {
 		return &processor{
-			configmapReader: configmap.NewConfigmapReader(obj),
+			configmapReader: configmap.NewConfigmapReader(k),
 			args:            args,
 		}, nil
 	} else {

@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/olegsu/iris/pkg/kube"
+
 	"github.com/olegsu/iris/pkg/util/reader/configmap"
 	"github.com/olegsu/iris/pkg/util/reader/file"
 )
@@ -18,6 +20,18 @@ type mockConfigmapReader struct{}
 
 func (m *mockConfigmapReader) Read(name string, namespace string) ([]byte, error) {
 	return []byte{}, nil
+}
+
+type mockKube struct{}
+
+func (m *mockKube) Watch(fn kube.WatchFn) {
+
+}
+func (m *mockKube) GetIRISConfigmap(name string, ns string) ([]byte, error) {
+	return []byte{}, nil
+}
+func (m *mockKube) FindResourceByLabels(obj interface{}, labels map[string]string) (bool, error) {
+	return true, nil
 }
 
 func Test_processor_Process(t *testing.T) {
@@ -87,7 +101,7 @@ func Test_processor_Process(t *testing.T) {
 func TestNewProcessor(t *testing.T) {
 	type args struct {
 		args []string
-		obj  interface{}
+		obj  kube.Kube
 	}
 	tests := []struct {
 		name    string
@@ -99,10 +113,11 @@ func TestNewProcessor(t *testing.T) {
 			name: "Should create processor with file reader when given input len=1",
 			args: args{
 				args: []string{"path/to/file"},
+				obj:  &mockKube{},
 			},
 			want: &processor{
 				args:       []string{"path/to/file"},
-				fileReader: file.NewFileReader(),
+				fileReader: file.NewFileReader(&mockKube{}),
 			},
 			wantErr: false,
 		},
@@ -113,13 +128,14 @@ func TestNewProcessor(t *testing.T) {
 					"name",
 					"namespace",
 				},
+				obj: &mockKube{},
 			},
 			want: &processor{
 				args: []string{
 					"name",
 					"namespace",
 				},
-				configmapReader: configmap.NewConfigmapReader(nil),
+				configmapReader: configmap.NewConfigmapReader(&mockKube{}),
 			},
 			wantErr: false,
 		},
@@ -127,6 +143,7 @@ func TestNewProcessor(t *testing.T) {
 			name: "Should return an error when args len is not 1 or 2",
 			args: args{
 				args: []string{},
+				obj:  &mockKube{},
 			},
 			want:    nil,
 			wantErr: true,

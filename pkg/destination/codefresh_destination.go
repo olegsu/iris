@@ -1,10 +1,7 @@
-package dal
+package destination
 
 import (
 	"bytes"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -14,54 +11,8 @@ import (
 	"k8s.io/api/core/v1"
 )
 
-var (
-	TypeDefault   = ""
-	TypeCodefresh = "codefresh"
-)
-
-type BaseDestination struct {
-	Name string `yaml:"name"`
-	Type string `yaml:"type"`
-}
-
-func (d *BaseDestination) GetName() string {
-	return d.Name
-}
-
-func (d *BaseDestination) GetType() string {
-	return d.Type
-}
-
-type DefaultDestination struct {
-	BaseDestination `yaml:",inline"`
-	URL             string `yaml:"url"`
-	Secret          string `yaml:"secret"`
-}
-
-func getHmac(secret string, payload []byte) string {
-	if secret != "" {
-		key := []byte(secret)
-		mac := hmac.New(sha256.New, key)
-		mac.Write(payload)
-		hmac := base64.URLEncoding.EncodeToString(mac.Sum(nil))
-		return hmac
-	}
-	return ""
-}
-
-func (d *DefaultDestination) Exec(payload interface{}) {
-	fmt.Printf("Executing default destination to %s\n", d.URL)
-	mJSON, _ := json.Marshal(payload)
-	contentReader := bytes.NewReader(mJSON)
-	req, _ := http.NewRequest("POST", d.URL, contentReader)
-	req.Header.Set("X-IRIS-HMAC", getHmac(d.Secret, mJSON))
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-	client.Do(req)
-}
-
-type CodefreshDestination struct {
-	BaseDestination `yaml:",inline"`
+type codefreshDestination struct {
+	baseDestination `yaml:",inline"`
 	Branch          string `yaml:"branch"`
 	Pipeline        string `yaml:"pipeline"`
 	CFToken         string `yaml:"cftoken"`
@@ -74,7 +25,7 @@ type codefreshPostRequestBody struct {
 	Branch    string            `json:"branch"`
 }
 
-func (d *CodefreshDestination) Exec(payload interface{}) {
+func (d *codefreshDestination) Exec(payload interface{}) {
 	postBody := &codefreshPostRequestBody{
 		Variables: make(map[string]string),
 	}

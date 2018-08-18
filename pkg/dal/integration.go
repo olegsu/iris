@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/olegsu/iris/pkg/destination"
+	"github.com/olegsu/iris/pkg/filter"
+
 	"github.com/olegsu/iris/pkg/util"
 	"k8s.io/api/core/v1"
 )
@@ -15,7 +18,6 @@ type Integration struct {
 }
 
 func (i *Integration) Exec(obj interface{}) (bool, error) {
-	fmt.Printf("Running integration %s\n", i.Name)
 	ev := obj.(*v1.Event)
 	var j interface{}
 	bytes, err := json.Marshal(&ev)
@@ -24,33 +26,14 @@ func (i *Integration) Exec(obj interface{}) (bool, error) {
 	}
 	json.Unmarshal(bytes, &j)
 	result := true
-	for index := 0; index < len(i.Filters); index++ {
-		filter := i.Filters[index]
-		f, err := GetDal().GetFilterByName(filter)
-		if err != nil {
-			util.EchoError(err)
-			return false, err
-		}
-		res, err := f.Apply(j)
-		if err != nil {
-			util.EchoError(err)
-			return false, err
-		}
-		if res == false {
-			result = false
-			break
-		}
+	result, err = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j)
+	if err != nil {
+		util.EchoError(err)
+		return false, err
 	}
 	if result == true {
-		for index := 0; index < len(i.Destinations); index++ {
-			dest := i.Destinations[index]
-			destination, err := GetDal().GetDestinationByName(dest)
-			if err != nil {
-				util.EchoError(err)
-			} else {
-				destination.Exec(obj)
-			}
-		}
+		fmt.Printf("%s pass all checks, executing\n", i.Name)
+		destination.Exec(GetDal().DestinationService, i.Destinations, obj)
 	}
 	return false, nil
 }

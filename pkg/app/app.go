@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/olegsu/iris/pkg/dal"
+	"github.com/olegsu/iris/pkg/kube"
 	"github.com/olegsu/iris/pkg/reader"
 	"github.com/olegsu/iris/pkg/server"
 )
@@ -25,20 +26,29 @@ func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool,
 }
 
 func CreateApp(config *ApplicationOptions) {
-	cs := dal.GetClientset(config.KubeconfigPath, config.InCluster)
+	k := kube.NewKubeManager(config.KubeconfigPath, config.InCluster)
 	var r reader.IRISProcessor
 	if config.IrisConfigMapName != "" {
 		r, _ = reader.NewProcessor([]string{
 			config.IrisConfigMapName,
 			config.IrisConfigMapNamespace,
-		}, nil)
+		}, k)
 	} else {
 		r, _ = reader.NewProcessor([]string{
 			config.IrisPath,
-		}, cs.Clientset.CoreV1())
+		}, k)
 	}
 	bytes, _ := reader.Process(r)
-	dal.CreateDalFromBytes(bytes)
-	go cs.StartWatching()
+	d := dal.CreateDalFromBytes(bytes, k)
+	fn := func(obj interface{}) {
+		onAdd(d.Integrations, obj)
+	}
+	go k.Watch(fn)
 	server.StartServer()
+}
+
+func onAdd(integrations []*dal.Integration, obj interface{}) {
+	for _, integration := range integrations {
+		go integration.Exec(obj)
+	}
 }

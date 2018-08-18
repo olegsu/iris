@@ -1,8 +1,7 @@
 package configmap
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
+	"github.com/olegsu/iris/pkg/kube"
 )
 
 // ConfigmapReader
@@ -11,27 +10,19 @@ type ConfigmapReader interface {
 }
 
 type reader struct {
-	kube kubernetes.Clientset
+	kube kube.Kube
 }
 
 // Read - read iris data from kubernetes configmap
 func (r *reader) Read(name string, namespace string) ([]byte, error) {
-	cm, err := r.kube.CoreV1().ConfigMaps(namespace).Get(name, metav1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-	return []byte(cm.Data["iris"]), nil
+	return r.kube.GetIRISConfigmap(namespace, name)
 }
 
 // NewConfigmapReader - creates configmap reader
 // obj shoud be castable to kubernetes.Clientset
-func NewConfigmapReader(obj interface{}) ConfigmapReader {
-	kube, ok := obj.(kubernetes.Clientset)
-	if ok == false {
-		return &reader{}
-	}
+func NewConfigmapReader(k kube.Kube) ConfigmapReader {
 	return &reader{
-		kube: kube,
+		kube: k,
 	}
 }
 
