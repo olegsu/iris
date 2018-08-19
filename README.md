@@ -30,10 +30,96 @@ Easily configure webhooks on Kubernetes events using highly customizable filters
 
 ## Run in cluster
 ### Using Helm
-* clone or fork this repository
-* create your iris.yaml file
-* install chart from local directory `helm install ./iris --values ./iris.yaml`
-* by default the chart will be installed into namespace `iris`, see default values to overwrite it
+1. clone or fork this repository
+
+```
+$ git clone https://github.com/olegsu/iris.git
+$ cd iris
+```
+
+2. create your iris.yaml file
+
+```
+$ cat << EOF > ./iris.yaml
+filters:
+  - name: MatchIrisNamespace
+    type: namespace
+    namespace: iris
+  - name: MatchPodKind
+    type: jsonpath
+    path: $.involvedObject.kind
+    value: Pod
+
+destinations:
+  - name: Webhook
+    url: http://webhook-pod.iris.svc.cluster.local:8080
+
+integrations:
+  - name: Report
+    destinations:
+    - Webhook
+    filters:
+    - MatchPodKind
+    - MatchIrisNamespace
+EOF
+```
+
+3. install chart from local directory
+
+```
+$ helm install ./iris --values ./iris.yaml
+```
+
+by default the chart will be installed into namespace `iris`, see default values to overwrite it
+
+4. If you want to webhook test, you apply under yaml.
+
+```
+$ #for exmaple...
+$ cat << EOF > ./webhook-pod.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: webhook-pod
+  namespace: iris
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook-pod
+  template:
+    metadata:
+      labels:
+        app: webhook-pod
+    spec:
+      containers:
+      - name: webhook-pod
+        image: nnao45/webhook-pod #Print that be received POST JSON contents with exposing port 8080
+        ports:
+        - name: http
+          containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-pod
+  namespace: iris
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: webhook-pod
+EOF
+$ kubectl apply -f webhook-pod.yaml
+```
+
+And `kubectl logs *<your pods>* -n iris`  
+Print, Filtered events.
 
 ## Build
 * clone or fork this repo
