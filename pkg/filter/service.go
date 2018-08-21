@@ -21,9 +21,6 @@ type Service interface {
 // GetFilterByName - finds a filters if exist
 func (d *dal) GetFilterByName(name string) (Filter, error) {
 	var f Filter
-	if d.filters == nil {
-		return nil, fmt.Errorf("No filters %s", name)
-	}
 	for index := 0; index < len(d.filters); index++ {
 		filterName := d.filters[index].GetName()
 		if filterName == name {
@@ -37,10 +34,12 @@ func (d *dal) GetFilterByName(name string) (Filter, error) {
 }
 
 // NewService - creates net Dal from json array of filters
-func NewService(filterArray []map[string]interface{}, k kube.Kube) Service {
-	tempDal := &dal{}
+func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Kube) Service {
+	tempDal := &dal{
+		filters: []Filter{},
+	}
 	for _, json := range filterArray {
-		f, _ := NewFilter(json, k)
+		f, _ := factory.Build(json, k)
 		tempDal.filters = append(tempDal.filters, f)
 	}
 	d = tempDal
@@ -49,25 +48,25 @@ func NewService(filterArray []map[string]interface{}, k kube.Kube) Service {
 
 // IsFiltersMatched Go over all filters and apply each one on on data
 // Return true is the data matched to all the filters
-func IsFiltersMatched(service Service, requiredFilters []string, data interface{}) (bool, error) {
+func IsFiltersMatched(service Service, requiredFilters []string, data interface{}) bool {
 	matched := true
-	var err error
 	for _, f := range requiredFilters {
 		var res bool
 		filter, err := service.GetFilterByName(f)
 		if err != nil {
 			util.EchoError(err)
 			matched = false
-		}
-		res, err = filter.Apply(data)
-		if err != nil {
-			util.EchoError(err)
-			matched = false
-		}
-		if res == false {
-			matched = false
+		} else {
+			res, err = filter.Apply(data)
+			if err != nil {
+				util.EchoError(err)
+				matched = false
+			}
+			if res == false {
+				matched = false
+			}
 		}
 	}
 
-	return matched, err
+	return matched
 }

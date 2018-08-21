@@ -23,8 +23,8 @@ func CreateDalFromBytes(bytes []byte, k kube.Kube) *Dal {
 	d := &Dal{}
 	var data map[string][]map[string]interface{}
 	util.UnmarshalOrDie(bytes, &data)
-
-	d.FilterService = filter.NewService(data["filters"], k)
+	filter.NewFactory()
+	d.FilterService = filter.NewService(filter.NewFactory(), data["filters"], k)
 
 	d.DestinationService = destination.NewService(data["destinations"], k)
 
