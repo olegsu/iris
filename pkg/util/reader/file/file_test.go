@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	kubeMock "github.com/olegsu/iris/pkg/kube/mocks"
 )
 
 type mockFileReaderSuccess struct {
@@ -73,13 +75,15 @@ func TestNewFileReader(t *testing.T) {
 	}{
 		{
 			name: "Should return Filereader interface",
-			want: &reader{},
+			want: &reader{
+				kube: &kubeMock.Kube{},
+			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewFileReader(); !reflect.DeepEqual(got, tt.want) {
+			if got := NewFileReader(&kubeMock.Kube{}); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewFileReader() = %v, want %v", got, tt.want)
 			}
 		})
