@@ -137,7 +137,7 @@ func TestIsFiltersMatched(t *testing.T) {
 					f := &filterMock.Filter{}
 					f.
 						On("Apply", mock.Anything).
-						Return(false, errors.New("Error!"))
+						Return(false, errors.New("Test!"))
 
 					s.
 						On("GetFilterByName", mock.Anything).
@@ -160,7 +160,7 @@ func TestIsFiltersMatched(t *testing.T) {
 
 					s.
 						On("GetFilterByName", mock.Anything).
-						Return(nil, errors.New("Error!"))
+						Return(nil, errors.New("Test!"))
 					return s
 				},
 				requiredFilters: []string{
