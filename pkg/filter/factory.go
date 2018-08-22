@@ -39,6 +39,9 @@ func (_f *f) Build(json map[string]interface{}, k kube.Kube) (Filter, error) {
 			f = &anyFilter{}
 			break
 		}
+		if f == nil {
+			return nil, fmt.Errorf("Type %s is not supported", json["type"])
+		}
 		util.MapToObjectOrDie(json, f)
 		return f, nil
 	} else {
