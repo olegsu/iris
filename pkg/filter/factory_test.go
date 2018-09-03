@@ -1,37 +1,20 @@
-package filter
+package filter_test
 
 import (
-	"reflect"
+	"fmt"
 	"testing"
 
+	"github.com/olegsu/iris/pkg/filter"
+	"github.com/olegsu/iris/pkg/filter/mocks"
 	kube "github.com/olegsu/iris/pkg/kube/mocks"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestNewFactory(t *testing.T) {
-	tests := []struct {
-		name string
-		want Factory
-	}{
-		{
-			name: "Get filter factory",
-			want: &f{},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewFactory(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewFactory() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_f_Build(t *testing.T) {
-
 	tests := []struct {
 		name         string
 		buildJSONArg func() map[string]interface{}
-		want         Filter
+		want         filter.Filter
 		wantErr      bool
 	}{
 		{
@@ -44,13 +27,6 @@ func Test_f_Build(t *testing.T) {
 					"reason": "reason",
 				}
 			},
-			want: &reasonFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "reason",
-				},
-				Reason: "reason",
-			},
 		},
 		{
 			name:    "Build filte with namespace type",
@@ -61,13 +37,6 @@ func Test_f_Build(t *testing.T) {
 					"name":      "filter-name",
 					"namespace": "default",
 				}
-			},
-			want: &namespaceFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "namespace",
-				},
-				Namespace: "default",
 			},
 		},
 		{
@@ -81,14 +50,6 @@ func Test_f_Build(t *testing.T) {
 					"value": "value",
 				}
 			},
-			want: &jsonPathFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "jsonpath",
-				},
-				Path:  "$.path",
-				Value: "value",
-			},
 		},
 		{
 			name:    "Build filte with jsonpath type with regexp match",
@@ -100,14 +61,6 @@ func Test_f_Build(t *testing.T) {
 					"path":   "$.path",
 					"regexp": ".*",
 				}
-			},
-			want: &jsonPathFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "jsonpath",
-				},
-				Path:   "$.path",
-				Regexp: ".*",
 			},
 		},
 		{
@@ -122,16 +75,6 @@ func Test_f_Build(t *testing.T) {
 					},
 				}
 			},
-			want: &labelFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "labels",
-				},
-				Labels: map[string]string{
-					"version": "v1",
-				},
-				kube: &kube.Kube{},
-			},
 		},
 		{
 			name:    "Build filte with any type",
@@ -145,16 +88,6 @@ func Test_f_Build(t *testing.T) {
 						"filter-2",
 					},
 				}
-			},
-			want: &anyFilter{
-				baseFilter: baseFilter{
-					Name: "filter-name",
-					Type: "any",
-				},
-				Filters: []string{
-					"filter-1",
-					"filter-2",
-				},
 			},
 		},
 		{
@@ -173,18 +106,17 @@ func Test_f_Build(t *testing.T) {
 					"type": "not-supported",
 				}
 			},
-			want: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewFactory().Build(tt.buildJSONArg(), &kube.Kube{})
-			if (err != nil) != tt.wantErr {
-				t.Errorf("f.Build() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("f.Build() = %v, want %v", got, tt.want)
+			factory := filter.NewFactory()
+			got, err := factory.Build(tt.buildJSONArg(), &mocks.Service{}, &kube.Kube{})
+			assert.Equalf(t, tt.wantErr, err != nil, "f.Build() error = %v, wantErr %v", err, tt.wantErr)
+
+			if tt.wantErr == false {
+				message := fmt.Sprintf("Returned object does not implement Filter interface")
+				assert.Implements(t, (*filter.Filter)(nil), got, message)
 			}
 		})
 	}

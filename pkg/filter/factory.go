@@ -10,13 +10,13 @@ import (
 
 // Factory interface builds filters
 type Factory interface {
-	Build(map[string]interface{}, kube.Kube) (Filter, error)
+	Build(map[string]interface{}, Service, kube.Kube) (Filter, error)
 }
 
 type f struct{}
 
 // Build build actual filter and return Filter interface
-func (_f *f) Build(json map[string]interface{}, k kube.Kube) (Filter, error) {
+func (_f *f) Build(json map[string]interface{}, s Service, k kube.Kube) (Filter, error) {
 	if json["type"] != nil {
 		t := strings.ToLower(json["type"].(string))
 		var f Filter
@@ -36,7 +36,9 @@ func (_f *f) Build(json map[string]interface{}, k kube.Kube) (Filter, error) {
 			}
 			break
 		case TypeAny:
-			f = &anyFilter{}
+			f = &anyFilter{
+				Service: s,
+			}
 			break
 		}
 		if f == nil {
