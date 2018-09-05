@@ -7,13 +7,11 @@ import (
 	"github.com/olegsu/iris/pkg/util"
 )
 
-var d *dal
-
 type dal struct {
 	filters []Filter
 }
 
-// Service
+// Service is the service of the filter package
 type Service interface {
 	GetFilterByName(string) (Filter, error)
 }
@@ -39,10 +37,9 @@ func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Ku
 		filters: []Filter{},
 	}
 	for _, json := range filterArray {
-		f, _ := factory.Build(json, k)
+		f, _ := factory.Build(json, tempDal, k)
 		tempDal.filters = append(tempDal.filters, f)
 	}
-	d = tempDal
 	return tempDal
 }
 

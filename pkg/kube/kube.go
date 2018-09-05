@@ -19,7 +19,7 @@ type WatchFn func(obj interface{})
 type Kube interface {
 	Watch(WatchFn)
 	GetIRISConfigmap(string, string) ([]byte, error)
-	FindResourceByLabels(interface{}, map[string]string) (bool, error)
+	ResourceByLabelsExist(interface{}, map[string]string) (bool, error)
 }
 
 type kube struct {
@@ -54,7 +54,7 @@ func (k *kube) GetIRISConfigmap(namespace string, name string) ([]byte, error) {
 	return []byte(cm.Data["iris"]), nil
 }
 
-func (k *kube) FindResourceByLabels(obj interface{}, labels map[string]string) (bool, error) {
+func (k *kube) ResourceByLabelsExist(obj interface{}, labels map[string]string) (bool, error) {
 	selector := ""
 	for k, v := range labels {
 		if selector == "" {

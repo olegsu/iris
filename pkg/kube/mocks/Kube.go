@@ -10,8 +10,8 @@ type Kube struct {
 	mock.Mock
 }
 
-// FindResourceByLabels provides a mock function with given fields: _a0, _a1
-func (_m *Kube) FindResourceByLabels(_a0 interface{}, _a1 map[string]string) (bool, error) {
+// ResourceByLabelsExist provides a mock function with given fields: _a0, _a1
+func (_m *Kube) ResourceByLabelsExist(_a0 interface{}, _a1 map[string]string) (bool, error) {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 bool

@@ -28,6 +28,7 @@ func TestNewService(t *testing.T) {
 		factory     *filterMock.Factory
 		filterArray []map[string]interface{}
 		kube        kube.Kube
+		service     filter.Service
 	}
 
 	tests := []struct {
@@ -57,7 +58,7 @@ func TestNewService(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if len(tt.args.filterArray) > 0 {
-				tt.args.factory.On("Build", tt.args.filterArray[0], tt.args.kube).Return(nil, nil)
+				tt.args.factory.On("Build", tt.args.filterArray[0], mock.Anything, tt.args.kube).Return(nil, nil)
 			}
 			filter.NewService(tt.args.factory, tt.args.filterArray, tt.args.kube)
 			tt.args.factory.AssertNumberOfCalls(t, "Build", tt.callCount)
@@ -212,12 +213,12 @@ func Test_dal_GetFilterByName(t *testing.T) {
 			},
 			getFactory: func(ret filter.Filter) filter.Factory {
 				factoryMock := &filterMock.Factory{}
-				factoryMock.On("Build", mock.Anything, mock.Anything).Return(ret, nil)
+				factoryMock.On("Build", mock.Anything, mock.Anything, mock.Anything).Return(ret, nil)
 				return factoryMock
 			},
 		},
 		{
-			name: "Shoul return error when filters are nil",
+			name: "Should return error when filters are nil",
 			want: func(name string) filter.Filter {
 				return nil
 			},
@@ -226,7 +227,7 @@ func Test_dal_GetFilterByName(t *testing.T) {
 			},
 			getFactory: func(ret filter.Filter) filter.Factory {
 				factoryMock := &filterMock.Factory{}
-				factoryMock.On("Build", mock.Anything, mock.Anything).Return(nil, errors.New("Error"))
+				factoryMock.On("Build", mock.Anything, mock.Anything, mock.Anything).Return(nil, errors.New("Error"))
 				return factoryMock
 			},
 			wantErr: true,
