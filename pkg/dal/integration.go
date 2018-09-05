@@ -7,7 +7,6 @@ import (
 	"github.com/olegsu/iris/pkg/destination"
 	"github.com/olegsu/iris/pkg/filter"
 
-	"github.com/olegsu/iris/pkg/util"
 	"k8s.io/api/core/v1"
 )
 
@@ -26,11 +25,7 @@ func (i *Integration) Exec(obj interface{}) (bool, error) {
 	}
 	json.Unmarshal(bytes, &j)
 	result := true
-	result, err = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j)
-	if err != nil {
-		util.EchoError(err)
-		return false, err
-	}
+	result = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j)
 	if result == true {
 		fmt.Printf("%s pass all checks, executing\n", i.Name)
 		destination.Exec(GetDal().DestinationService, i.Destinations, obj)

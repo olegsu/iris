@@ -12,7 +12,6 @@ type jsonPathFilter struct {
 	Path       string `yaml:"path"`
 	Value      string `yaml:"value"`
 	Regexp     string `yaml:"regexp"`
-	Namespace  string `yaml:"namespace"`
 }
 
 func (f *jsonPathFilter) Apply(data interface{}) (bool, error) {

@@ -30,7 +30,7 @@ func (m *mockKube) Watch(fn kube.WatchFn) {
 func (m *mockKube) GetIRISConfigmap(name string, ns string) ([]byte, error) {
 	return []byte{}, nil
 }
-func (m *mockKube) FindResourceByLabels(obj interface{}, labels map[string]string) (bool, error) {
+func (m *mockKube) ResourceByLabelsExist(obj interface{}, labels map[string]string) (bool, error) {
 	return true, nil
 }
 

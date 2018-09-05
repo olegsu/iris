@@ -9,5 +9,5 @@ type labelFilter struct {
 }
 
 func (f *labelFilter) Apply(data interface{}) (bool, error) {
-	return f.kube.FindResourceByLabels(data, f.Labels)
+	return f.kube.ResourceByLabelsExist(data, f.Labels)
 }

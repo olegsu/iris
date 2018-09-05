@@ -3,13 +3,14 @@ package filter
 type anyFilter struct {
 	baseFilter `yaml:",inline"`
 	Filters    []string `yaml:"filters"`
+	Service    Service
 }
 
 func (f *anyFilter) Apply(data interface{}) (bool, error) {
 	result := false
 	var err error
 	for _, name := range f.Filters {
-		filter, err := d.GetFilterByName(name)
+		filter, err := f.Service.GetFilterByName(name)
 		if err != nil {
 			return false, err
 		}

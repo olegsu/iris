@@ -14,6 +14,9 @@ ARG VCS_SLUG
 ARG CI_BUILD_URL
 ARG CI_BUILD_ID
 
+RUN go get github.com/stretchr/testify/mock
+RUN go get github.com/stretchr/testify/assert
+
 RUN mkdir -p /go/src/github.com/olegsu/iris
 WORKDIR /go/src/github.com/olegsu/iris
 
