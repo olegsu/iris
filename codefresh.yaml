@@ -67,9 +67,9 @@ steps:
   
   Release:
     image: goreleaser/goreleaser
-    working_directory: /go/src/github.com/codefresh-io/iris
+    working_directory: /go/src/github.com/olegsus/iris
     binds:
-    - ./iris:/go/src/github.com/codefresh-io/iris
+    - ./iris:/go/src/github.com/olegsus/iris
     fail_fast: false
     commands:
     - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate --skip-publish --debug
