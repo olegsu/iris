@@ -1,0 +1,79 @@
+version: '1.0'
+steps:
+
+  Prepare:
+    title: Update Helm package version  
+    image: alpine:3.8
+    commands:
+    - apk add --no-cache curl jq python py-pip
+    - pip install yq
+    - sh ${{CF_VOLUME_PATH}}/iris/hack/.codefresh/push-helm.sh
+    
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    image_name: olsynt/iris
+    working_directory: ./
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    build_arguments:
+      - CODECOV_TOKEN=${{CODECOV_TOKEN}}
+      - VCS_COMMIT_ID=${{CF_REVISION}}
+      - VCS_BRANCH_NAME=${{CF_BRANCH}}
+      - VCS_SLUG=${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
+      - CI_BUILD_ID=${{CF_BUILD_ID}}
+      - CI_BUILD_URL=${{CF_BUILD_URL}}	
+    
+  PushingToDockerRegistryVersion:
+    title: Pushing to Docker Registry
+    type: push
+    candidate: '${{BuildingDockerImage}}'
+    tags:
+    - ${{CF_BRANCH_TAG_NORMALIZED}}
+    - ${{IRIS_VERSION}}
+    registry: dockerhub
+    
+  PushingToDockerRegistryLatest:
+    title: Pushing to Docker Registry
+    type: push
+    candidate: '${{BuildingDockerImage}}'
+    tag: latest
+    registry: dockerhub
+    when:
+      branch:
+        only:
+        - master
+    
+  Push:
+    title: Push Helm package to repo  
+    image: codefresh/cfstep-helm:2.9.0
+    environment:
+    - ACTION=push
+    - CHART_REF=iris
+    
+  GitTag:
+    title: Push tag to git
+    image: codefresh/cli
+    commands:
+    - git remote rm origin
+    - git remote add origin https://olegsu:${{GITHUB_TOKEN}}@github.com/olegsu/iris.git
+    - git tag v${{IRIS_VERSION}}
+    - git push --tags
+    fail_fast: false
+    when:
+      branch:
+        only:
+        - master
+  
+  Release:
+    image: goreleaser/goreleaser
+    working_directory: /go/src/github.com/codefresh-io/iris
+    binds:
+    - ./iris:/go/src/github.com/codefresh-io/iris
+    fail_fast: false
+    commands:
+    - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate --skip-publish --debug
+    when:
+      branch:
+        only:
+        - master
