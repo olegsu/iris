@@ -72,7 +72,7 @@ steps:
     - ./iris:/go/src/github.com/olegsus/iris
     fail_fast: false
     commands:
-    - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate --skip-publish --debug
+    - goreleaser release -f .goreleaser.yml --rm-dist
     when:
       branch:
         only:
