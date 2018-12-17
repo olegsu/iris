@@ -1,9 +1,15 @@
 version: '1.0'
+
+stages:
+- Integration
+- Delivery
+
 steps:
 
   Prepare:
     title: Update Helm package version  
     image: alpine:3.8
+    stage: Integration
     commands:
     - apk add --no-cache curl jq python py-pip
     - pip install yq
@@ -12,6 +18,7 @@ steps:
   BuildingDockerImage:
     title: Building Docker Image
     type: build
+    stage: Integration
     image_name: olsynt/iris
     working_directory: ./
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
@@ -27,6 +34,7 @@ steps:
   PushingToDockerRegistryVersion:
     title: Pushing to Docker Registry
     type: push
+    stage: Delivery
     candidate: '${{BuildingDockerImage}}'
     tags:
     - ${{CF_BRANCH_TAG_NORMALIZED}}
@@ -36,6 +44,7 @@ steps:
   PushingToDockerRegistryLatest:
     title: Pushing to Docker Registry
     type: push
+    stage: Delivery
     candidate: '${{BuildingDockerImage}}'
     tag: latest
     registry: dockerhub
@@ -44,16 +53,18 @@ steps:
         only:
         - master
     
-  Push:
+  PushingHelmChart:
     title: Push Helm package to repo  
+    stage: Delivery
     image: codefresh/cfstep-helm:2.9.0
     environment:
     - ACTION=push
     - CHART_REF=iris
     
-  GitTag:
+  CreatingGitTag:
     title: Push tag to git
     image: codefresh/cli
+    stage: Delivery
     commands:
     - git remote rm origin
     - git remote add origin https://olegsu:${{GITHUB_TOKEN}}@github.com/olegsu/iris.git
@@ -65,14 +76,15 @@ steps:
         only:
         - master
   
-  Release:
+  Releasing:
     image: goreleaser/goreleaser
-    working_directory: /go/src/github.com/olegsus/iris
+    stage: Delivery
+    working_directory: /go/src/github.com/olegsu/iris
     binds:
-    - ./iris:/go/src/github.com/olegsus/iris
+    - ./iris:/go/src/github.com/olegsu/iris
     fail_fast: false
     commands:
-    - goreleaser release -f .goreleaser.yml --rm-dist
+    - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate
     when:
       branch:
         only:
