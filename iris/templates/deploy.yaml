@@ -18,15 +18,16 @@ spec:
     spec:
       containers:
       - env:
-        - name: IRIS_CONFIGMAP_NAME
-          value: {{ template "fullname" . }}
-        - name: IRIS_IN_CLUSTER
-          value: "true"
-        - name: IRIS_CONFIGMAP_NAMESPACE
-          value: {{ .Values.namespace }}
+        - name: IRIS_FILE
+          value: {{ .Values.configmap.mountPath }}
         name: {{ template "fullname" . }}
         command:
         - "iris"
         - "run"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        volumes:
+        - name: config
+          configMap:
+            name: {{ template "fullname" . }}
+            mountPath: {{ .Values.configmap.mountPath }}
