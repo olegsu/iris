@@ -18,7 +18,6 @@ type WatchFn func(obj interface{})
 
 type Kube interface {
 	Watch(WatchFn)
-	GetIRISConfigmap(string, string) ([]byte, error)
 	ResourceByLabelsExist(interface{}, map[string]string) (bool, error)
 }
 
@@ -44,14 +43,6 @@ func (k *kube) Watch(watchFn WatchFn) {
 	for {
 		time.Sleep(time.Second)
 	}
-}
-
-func (k *kube) GetIRISConfigmap(namespace string, name string) ([]byte, error) {
-	cm, err := k.Clientset.CoreV1().ConfigMaps(namespace).Get(name, metav1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-	return []byte(cm.Data["iris"]), nil
 }
 
 func (k *kube) ResourceByLabelsExist(obj interface{}, labels map[string]string) (bool, error) {

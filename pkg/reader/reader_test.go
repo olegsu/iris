@@ -6,7 +6,6 @@ import (
 
 	"github.com/olegsu/iris/pkg/kube"
 
-	"github.com/olegsu/iris/pkg/util/reader/configmap"
 	"github.com/olegsu/iris/pkg/util/reader/file"
 )
 
@@ -16,20 +15,12 @@ func (m *mockFileReader) Read(path string) ([]byte, error) {
 	return []byte{}, nil
 }
 
-type mockConfigmapReader struct{}
-
-func (m *mockConfigmapReader) Read(name string, namespace string) ([]byte, error) {
-	return []byte{}, nil
-}
-
 type mockKube struct{}
 
 func (m *mockKube) Watch(fn kube.WatchFn) {
 
 }
-func (m *mockKube) GetIRISConfigmap(name string, ns string) ([]byte, error) {
-	return []byte{}, nil
-}
+
 func (m *mockKube) ResourceByLabelsExist(obj interface{}, labels map[string]string) (bool, error) {
 	return true, nil
 }
@@ -37,9 +28,8 @@ func (m *mockKube) ResourceByLabelsExist(obj interface{}, labels map[string]stri
 func Test_processor_Process(t *testing.T) {
 
 	type fields struct {
-		fileReader      file.FileReader
-		configmapReader configmap.ConfigmapReader
-		args            []string
+		fileReader file.FileReader
+		args       []string
 	}
 	tests := []struct {
 		name    string
@@ -59,18 +49,6 @@ func Test_processor_Process(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Should process from configmap",
-			fields: fields{
-				args: []string{
-					"name",
-					"namespace",
-				},
-				configmapReader: &mockConfigmapReader{},
-			},
-			want:    []byte{},
-			wantErr: false,
-		},
-		{
 			name: "Should return error when no readers found ",
 			fields: fields{
 				args: []string{},
@@ -82,9 +60,8 @@ func Test_processor_Process(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			i := &processor{
-				fileReader:      tt.fields.fileReader,
-				configmapReader: tt.fields.configmapReader,
-				args:            tt.fields.args,
+				fileReader: tt.fields.fileReader,
+				args:       tt.fields.args,
 			}
 			got, err := i.Process()
 			if (err != nil) != tt.wantErr {
@@ -118,24 +95,6 @@ func TestNewProcessor(t *testing.T) {
 			want: &processor{
 				args:       []string{"path/to/file"},
 				fileReader: file.NewFileReader(&mockKube{}),
-			},
-			wantErr: false,
-		},
-		{
-			name: "Should create processor with configmap reader when given input len=2",
-			args: args{
-				args: []string{
-					"name",
-					"namespace",
-				},
-				obj: &mockKube{},
-			},
-			want: &processor{
-				args: []string{
-					"name",
-					"namespace",
-				},
-				configmapReader: configmap.NewConfigmapReader(&mockKube{}),
 			},
 			wantErr: false,
 		},
