@@ -8,36 +8,26 @@ import (
 )
 
 type ApplicationOptions struct {
-	IrisPath               string
-	KubeconfigPath         string
-	InCluster              bool
-	IrisConfigMapName      string
-	IrisConfigMapNamespace string
+	IrisPath       string
+	KubeconfigPath string
+	InCluster      bool
 }
 
-func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool, irisCmName string, irisCmNamespace string) *ApplicationOptions {
+func NewApplicationOptions(irisconfig string, kubeconfig string, incluster bool) *ApplicationOptions {
 	return &ApplicationOptions{
-		IrisPath:               irisconfig,
-		KubeconfigPath:         kubeconfig,
-		InCluster:              incluster,
-		IrisConfigMapName:      irisCmName,
-		IrisConfigMapNamespace: irisCmNamespace,
+		IrisPath:       irisconfig,
+		KubeconfigPath: kubeconfig,
+		InCluster:      incluster,
 	}
 }
 
 func CreateApp(config *ApplicationOptions) {
 	k := kube.NewKubeManager(config.KubeconfigPath, config.InCluster)
 	var r reader.IRISProcessor
-	if config.IrisConfigMapName != "" {
-		r, _ = reader.NewProcessor([]string{
-			config.IrisConfigMapName,
-			config.IrisConfigMapNamespace,
-		}, k)
-	} else {
-		r, _ = reader.NewProcessor([]string{
-			config.IrisPath,
-		}, k)
-	}
+
+	r, _ = reader.NewProcessor([]string{
+		config.IrisPath,
+	}, k)
 	bytes, _ := reader.Process(r)
 	d := dal.CreateDalFromBytes(bytes, k)
 	fn := func(obj interface{}) {

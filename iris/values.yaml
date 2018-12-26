@@ -5,3 +5,6 @@ image:
 namespace: iris
 
 imagePullPolicy: IfNotPresent
+
+configmap:
+  mountPath: /iris/iris.yaml

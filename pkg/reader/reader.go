@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/olegsu/iris/pkg/kube"
-	"github.com/olegsu/iris/pkg/util/reader/configmap"
 	"github.com/olegsu/iris/pkg/util/reader/file"
 )
 
@@ -15,9 +14,8 @@ type (
 	}
 
 	processor struct {
-		fileReader      file.FileReader
-		configmapReader configmap.ConfigmapReader
-		args            []string
+		fileReader file.FileReader
+		args       []string
 	}
 )
 
@@ -25,8 +23,6 @@ type (
 func (i *processor) Process() ([]byte, error) {
 	if i.fileReader != nil {
 		return i.fileReader.Read(i.args[0])
-	} else if i.configmapReader != nil {
-		return i.configmapReader.Read(i.args[0], i.args[1])
 	} else {
 		return nil, fmt.Errorf("No reader found")
 	}
@@ -38,11 +34,6 @@ func NewProcessor(args []string, k kube.Kube) (IRISProcessor, error) {
 		return &processor{
 			fileReader: file.NewFileReader(k),
 			args:       args,
-		}, nil
-	} else if len(args) == 2 {
-		return &processor{
-			configmapReader: configmap.NewConfigmapReader(k),
-			args:            args,
 		}, nil
 	} else {
 		return nil, fmt.Errorf("Could not create iris processor, arguments not match")
