@@ -79,13 +79,21 @@ steps:
   Releasing:
     image: goreleaser/goreleaser
     stage: Delivery
-    working_directory: /go/src/github.com/olegsu/iris
-    binds:
-    - ./iris:/go/src/github.com/olegsu/iris
     fail_fast: false
     commands:
-    - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate
+    - goreleaser release -f .goreleaser.yml --rm-dist
     when:
       branch:
         only:
+        - master
+
+  BuildBinaries:
+    image: goreleaser/goreleaser
+    stage: Delivery
+    fail_fast: false
+    commands:
+    - goreleaser release -f .goreleaser.yml --rm-dist --skip-publish
+    when:
+      branch:
+        ignore:
         - master
