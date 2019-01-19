@@ -1,4 +1,4 @@
-FROM golang:1.10-alpine3.8 as builder
+FROM golang:1.11-alpine3.8 as builder
 
 # Add basic tools
 RUN apk add --no-cache --update curl bash make git
@@ -16,28 +16,26 @@ ARG CI_BUILD_ID
 
 RUN go get github.com/stretchr/testify/mock
 RUN go get github.com/stretchr/testify/assert
-
-RUN mkdir -p /go/src/github.com/olegsu/iris
-WORKDIR /go/src/github.com/olegsu/iris
-
-COPY . .
+RUN mkdir /iris
+COPY . /iris
+WORKDIR /iris
 
 # Run tests
-RUN make test
+RUN sh ./hack/test.sh
 # Report coverage
 RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
 
 # Build binary
-RUN make build
+RUN CGO_ENABLED=0 go build -mod=vendor -v -o "./dist/bin/iris" *.go
 
 
 FROM alpine:3.6
 
 RUN apk add --no-cache ca-certificates
 
-COPY --from=builder /go/src/github.com/olegsu/iris/dist/bin/iris /usr/bin/iris
-COPY --from=builder /go/src/github.com/olegsu/iris/hack/docker_entrypoint.sh /entrypoint.sh
-COPY --from=builder /go/src/github.com/olegsu/iris/VERSION /VERSION
+COPY --from=builder /iris/dist/bin/iris /usr/bin/iris
+COPY --from=builder /iris/hack/docker_entrypoint.sh /entrypoint.sh
+COPY --from=builder /iris/VERSION /VERSION
 
 ENV PATH $PATH:/usr/bin/iris
 ENTRYPOINT ["sh", "entrypoint.sh"]
