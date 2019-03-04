@@ -18,46 +18,9 @@ steps:
   Test:
     title: Run unit test
     image: golang:1.11
+    stage: Integration
     commands:
     - make test
-
-  BuildingDockerImage:
-    title: Building Docker Image
-    type: build
-    stage: Integration
-    image_name: olsynt/iris
-    working_directory: ./
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-    dockerfile: Dockerfile
-    build_arguments:
-      - CODECOV_TOKEN=${{CODECOV_TOKEN}}
-      - VCS_COMMIT_ID=${{CF_REVISION}}
-      - VCS_BRANCH_NAME=${{CF_BRANCH}}
-      - VCS_SLUG=${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
-      - CI_BUILD_ID=${{CF_BUILD_ID}}
-      - CI_BUILD_URL=${{CF_BUILD_URL}}	
-    
-  PushingToDockerRegistryVersion:
-    title: Pushing to Docker Registry
-    type: push
-    stage: Delivery
-    candidate: '${{BuildingDockerImage}}'
-    tags:
-    - ${{CF_BRANCH_TAG_NORMALIZED}}
-    - ${{IRIS_VERSION}}
-    registry: dockerhub
-    
-  PushingToDockerRegistryLatest:
-    title: Pushing to Docker Registry
-    type: push
-    stage: Delivery
-    candidate: '${{BuildingDockerImage}}'
-    tag: latest
-    registry: dockerhub
-    when:
-      branch:
-        only:
-        - master
     
   PushingHelmChart:
     title: Push Helm package to repo  
@@ -92,7 +55,7 @@ steps:
       branch:
         only:
         - master
-
+  
   BuildBinaries:
     image: goreleaser/goreleaser
     stage: Delivery
@@ -102,4 +65,35 @@ steps:
     when:
       branch:
         ignore:
+        - master
+
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    stage: Integration
+    image_name: olsynt/iris
+    working_directory: ./
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+
+  PushingToDockerRegistryVersion:
+    title: Pushing to Docker Registry
+    type: push
+    stage: Delivery
+    candidate: '${{BuildingDockerImage}}'
+    tags:
+    - ${{CF_BRANCH_TAG_NORMALIZED}}
+    - ${{IRIS_VERSION}}
+    registry: dockerhub
+    
+  PushingToDockerRegistryLatest:
+    title: Pushing to Docker Registry
+    type: push
+    stage: Delivery
+    candidate: '${{BuildingDockerImage}}'
+    tag: latest
+    registry: dockerhub
+    when:
+      branch:
+        only:
         - master
