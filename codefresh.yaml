@@ -14,7 +14,13 @@ steps:
     - apk add --no-cache curl jq python py-pip
     - pip install yq
     - sh ${{CF_VOLUME_PATH}}/iris/hack/.codefresh/push-helm.sh
-    
+
+  Test:
+    title: Run unit test
+    image: golang:1.11-alpine3.8
+    commands:
+    - make test
+
   BuildingDockerImage:
     title: Building Docker Image
     type: build
