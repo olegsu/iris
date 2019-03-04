@@ -72,7 +72,6 @@ steps:
     type: build
     stage: Integration
     image_name: olsynt/iris
-    working_directory: ./
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
 
