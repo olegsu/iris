@@ -29,7 +29,7 @@ RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
 RUN CGO_ENABLED=0 go build -mod=vendor -v -o "./dist/bin/iris" *.go
 
 
-FROM alpine:3.6
+FROM alpine:3.8
 
 RUN apk add --no-cache ca-certificates
 
