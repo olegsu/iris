@@ -17,7 +17,7 @@ steps:
 
   Test:
     title: Run unit test
-    image: golang:1.11-alpine3.8
+    image: golang:1.11
     commands:
     - make test
 
