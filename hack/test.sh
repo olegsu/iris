@@ -15,3 +15,6 @@ echo "mode: set" > .cover/cover.out && cat .cover/*.cover.out | grep -v mode: | 
    awk '{if($1 != last) {print $0;last=$1}}' >> .cover/cover.out
 
 go tool cover -html=.cover/cover.out -o=.cover/coverage.html
+
+CODECOV_BASH_URL=https://codecov.io/bash
+if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi

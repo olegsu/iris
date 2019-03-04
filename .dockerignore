@@ -1,4 +1,3 @@
-dist
 example.*
 Dockerfile
 kube-resourecs

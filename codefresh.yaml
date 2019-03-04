@@ -14,44 +14,13 @@ steps:
     - apk add --no-cache curl jq python py-pip
     - pip install yq
     - sh ${{CF_VOLUME_PATH}}/iris/hack/.codefresh/push-helm.sh
-    
-  BuildingDockerImage:
-    title: Building Docker Image
-    type: build
+
+  Test:
+    title: Run unit test
+    image: golang:1.11
     stage: Integration
-    image_name: olsynt/iris
-    working_directory: ./
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-    dockerfile: Dockerfile
-    build_arguments:
-      - CODECOV_TOKEN=${{CODECOV_TOKEN}}
-      - VCS_COMMIT_ID=${{CF_REVISION}}
-      - VCS_BRANCH_NAME=${{CF_BRANCH}}
-      - VCS_SLUG=${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
-      - CI_BUILD_ID=${{CF_BUILD_ID}}
-      - CI_BUILD_URL=${{CF_BUILD_URL}}	
-    
-  PushingToDockerRegistryVersion:
-    title: Pushing to Docker Registry
-    type: push
-    stage: Delivery
-    candidate: '${{BuildingDockerImage}}'
-    tags:
-    - ${{CF_BRANCH_TAG_NORMALIZED}}
-    - ${{IRIS_VERSION}}
-    registry: dockerhub
-    
-  PushingToDockerRegistryLatest:
-    title: Pushing to Docker Registry
-    type: push
-    stage: Delivery
-    candidate: '${{BuildingDockerImage}}'
-    tag: latest
-    registry: dockerhub
-    when:
-      branch:
-        only:
-        - master
+    commands:
+    - make test
     
   PushingHelmChart:
     title: Push Helm package to repo  
@@ -79,12 +48,50 @@ steps:
   Releasing:
     image: goreleaser/goreleaser
     stage: Delivery
-    working_directory: /go/src/github.com/olegsu/iris
-    binds:
-    - ./iris:/go/src/github.com/olegsu/iris
     fail_fast: false
     commands:
-    - goreleaser release -f .goreleaser.yml --rm-dist --skip-validate
+    - goreleaser release -f .goreleaser.yml --rm-dist
+    when:
+      branch:
+        only:
+        - master
+  
+  BuildBinaries:
+    image: goreleaser/goreleaser
+    stage: Delivery
+    fail_fast: false
+    commands:
+    - goreleaser release -f .goreleaser.yml --rm-dist --skip-publish --skip-validate
+    when:
+      branch:
+        ignore:
+        - master
+
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    stage: Integration
+    image_name: olsynt/iris
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+
+  PushingToDockerRegistryVersion:
+    title: Pushing to Docker Registry
+    type: push
+    stage: Delivery
+    candidate: '${{BuildingDockerImage}}'
+    tags:
+    - ${{CF_BRANCH_TAG_NORMALIZED}}
+    - ${{IRIS_VERSION}}
+    registry: dockerhub
+    
+  PushingToDockerRegistryLatest:
+    title: Pushing to Docker Registry
+    type: push
+    stage: Delivery
+    candidate: '${{BuildingDockerImage}}'
+    tag: latest
+    registry: dockerhub
     when:
       branch:
         only:
