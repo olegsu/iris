@@ -61,7 +61,7 @@ steps:
     stage: Delivery
     fail_fast: false
     commands:
-    - goreleaser release -f .goreleaser.yml --rm-dist --skip-publish
+    - goreleaser release -f .goreleaser.yml --rm-dist --skip-publish --skip-validate
     when:
       branch:
         ignore:
