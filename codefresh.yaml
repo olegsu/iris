@@ -62,7 +62,7 @@ steps:
     fail_fast: false
     commands:
     - go mod download
-    - goreleaser release -f .goreleaser.yml --rm-dist --skip-publish --skip-validate
+    - goreleaser release -f .goreleaser.dev.yml --rm-dist --skip-publish --skip-validate
     when:
       branch:
         ignore:
