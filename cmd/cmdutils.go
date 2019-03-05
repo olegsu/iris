@@ -17,6 +17,8 @@ package cmd
 import (
 	"fmt"
 	"os"
+
+	"github.com/olegsu/iris/pkg/logger"
 )
 
 func dieOnError(err error) {
@@ -24,4 +26,11 @@ func dieOnError(err error) {
 		fmt.Errorf(err.Error())
 		os.Exit(1)
 	}
+}
+
+func buildLogger(cmd string) logger.Logger {
+	return logger.New(&logger.Options{
+		Command: cmd,
+		Verbose: true,
+	})
 }

@@ -4,11 +4,13 @@ import (
 	"fmt"
 
 	"github.com/olegsu/iris/pkg/kube"
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/olegsu/iris/pkg/util"
 )
 
 type dal struct {
 	filters []Filter
+	logger  logger.Logger
 }
 
 // Service is the service of the filter package
@@ -32,9 +34,10 @@ func (d *dal) GetFilterByName(name string) (Filter, error) {
 }
 
 // NewService - creates net Dal from json array of filters
-func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Kube) Service {
+func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Kube, logger logger.Logger) Service {
 	tempDal := &dal{
 		filters: []Filter{},
+		logger:  logger,
 	}
 	for _, json := range filterArray {
 		f, _ := factory.Build(json, tempDal, k)

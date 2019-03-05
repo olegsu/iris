@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -28,7 +27,7 @@ func getHmac(secret string, payload []byte) string {
 }
 
 func (d *defaultDestination) Exec(payload interface{}) {
-	fmt.Printf("Executing default destination to %s\n", d.URL)
+	d.logger.Debug("Executing default destination", "name", d.Name, "URL", d.URL)
 	mJSON, _ := json.Marshal(payload)
 	contentReader := bytes.NewReader(mJSON)
 	req, _ := http.NewRequest("POST", d.URL, contentReader)

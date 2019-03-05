@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 type codefreshDestination struct {
@@ -43,7 +43,7 @@ func (d *codefreshDestination) Exec(payload interface{}) {
 	contentReader := bytes.NewReader(mJSON)
 
 	url := fmt.Sprintf("https://g.codefresh.io/api/pipelines/run/%s", url.QueryEscape(d.Pipeline))
-	fmt.Printf("Executing Codefresh destination\n")
+	d.logger.Debug("Executing Codefresh destination\n")
 	req, _ := http.NewRequest("POST", url, contentReader)
 	req.Header.Set("authorization", d.CFToken)
 	req.Header.Set("User-Agent", "IRIS")
@@ -53,8 +53,8 @@ func (d *codefreshDestination) Exec(payload interface{}) {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode == 200 {
-		fmt.Printf("Build ID: %s\n", string(body))
+		d.logger.Debug("Build started", "ID", string(body))
 	} else {
-		fmt.Printf("Error:\nStatus Code: %d\nBody: %s\n", resp.StatusCode, string(body))
+		d.logger.Debug("Error!", "Status_Code", resp.StatusCode, "message", string(body))
 	}
 }

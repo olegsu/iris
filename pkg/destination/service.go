@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/olegsu/iris/pkg/kube"
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/olegsu/iris/pkg/util"
 )
 
@@ -11,6 +12,7 @@ var d *dal
 
 type dal struct {
 	destinations []Destination
+	logger       logger.Logger
 }
 
 // Service
@@ -37,10 +39,12 @@ func (d *dal) GetDestinationByName(name string) (Destination, error) {
 }
 
 // NewService - creates net Dal from json array of filters
-func NewService(destinationArray []map[string]interface{}, k kube.Kube) Service {
-	tempDal := &dal{}
+func NewService(destinationArray []map[string]interface{}, k kube.Kube, logger logger.Logger) Service {
+	tempDal := &dal{
+		logger: logger,
+	}
 	for _, json := range destinationArray {
-		f := NewDestination(json, k)
+		f := NewDestination(json, k, logger)
 		tempDal.destinations = append(tempDal.destinations, f)
 	}
 	d = tempDal

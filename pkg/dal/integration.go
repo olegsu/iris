@@ -2,18 +2,19 @@ package dal
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/olegsu/iris/pkg/destination"
 	"github.com/olegsu/iris/pkg/filter"
+	"github.com/olegsu/iris/pkg/logger"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 type Integration struct {
 	Name         string   `yaml:"name"`
 	Filters      []string `yaml:"filters"`
 	Destinations []string `yaml:"destinations"`
+	logger       logger.Logger
 }
 
 func (i *Integration) Exec(obj interface{}) (bool, error) {
@@ -27,7 +28,7 @@ func (i *Integration) Exec(obj interface{}) (bool, error) {
 	result := true
 	result = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j)
 	if result == true {
-		fmt.Printf("%s pass all checks, executing\n", i.Name)
+		i.logger.Debug("All checks are passed, executing", "name", i.Name)
 		destination.Exec(GetDal().DestinationService, i.Destinations, obj)
 	}
 	return false, nil

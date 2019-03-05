@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"k8s.io/api/core/v1"
+	"github.com/olegsu/iris/pkg/logger"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/kubernetes"
@@ -23,10 +24,11 @@ type Kube interface {
 
 type kube struct {
 	Clientset *kubernetes.Clientset
+	logger    logger.Logger
 }
 
 func (k *kube) Watch(watchFn WatchFn) {
-	fmt.Printf("Watching\n")
+	k.logger.Debug("Starting kuberntes watcher")
 	watchlist := cache.NewListWatchFromClient(k.Clientset.Core().RESTClient(), "events", metav1.NamespaceAll, fields.Everything())
 	_, controller := cache.NewInformer(
 		watchlist,
@@ -67,15 +69,17 @@ func (k *kube) ResourceByLabelsExist(obj interface{}, labels map[string]string) 
 	return len(pods.Items) > 0, nil
 }
 
-func NewKubeManager(kubeconfig string, incluster bool) Kube {
-	k := &kube{}
+func NewKubeManager(kubeconfig string, incluster bool, logger logger.Logger) Kube {
+	k := &kube{
+		logger: logger,
+	}
 	var config *rest.Config
 	var err error
 	if incluster == true {
-		fmt.Printf("Running from in cluster\n")
+		logger.Debug("Running from in cluster")
 		config, err = rest.InClusterConfig()
 	} else {
-		fmt.Printf("Connecting to cluster from kubeconfig %s\n", kubeconfig)
+		logger.Debug("Connecting to cluster from kubeconfig", "path", kubeconfig)
 		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
 	}
 	if err != nil {
