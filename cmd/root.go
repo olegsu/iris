@@ -1,4 +1,4 @@
-package main
+package cmd
 
 // Copyright © 2019 oleg2807@gmail.com
 //
@@ -14,8 +14,28 @@ package main
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import "github.com/olegsu/iris/cmd"
+import (
+	"os"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+var rootCmdOptions struct {
+	Verbose bool
+}
+
+var rootCmd = &cobra.Command{
+	Use:     "iris",
+	Long:    "Watch on Kubernetes events, filter and send them as standard wehbook to any system",
+	Version: os.Getenv("IRIS_VERSION"),
+}
+
+// Execute - execute the root command
+func Execute() {
+	err := rootCmd.Execute()
+	dieOnError(err)
+}
+
+func init() {
+	rootCmd.PersistentFlags().BoolVar(&rootCmdOptions.Verbose, "verbose", false, "Set to get more detailed output")
 }

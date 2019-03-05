@@ -1,4 +1,4 @@
-package main
+package cmd
 
 // Copyright © 2019 oleg2807@gmail.com
 //
@@ -14,8 +14,14 @@ package main
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import "github.com/olegsu/iris/cmd"
+import (
+	"fmt"
+	"os"
+)
 
-func main() {
-	cmd.Execute()
+func dieOnError(err error) {
+	if err != nil {
+		fmt.Errorf(err.Error())
+		os.Exit(1)
+	}
 }
