@@ -9,6 +9,7 @@ import (
 	filterMock "github.com/olegsu/iris/pkg/filter/mocks"
 	"github.com/olegsu/iris/pkg/kube"
 	kubeMock "github.com/olegsu/iris/pkg/kube/mocks"
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -57,10 +58,11 @@ func TestNewService(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			l := logger.New(nil)
 			if len(tt.args.filterArray) > 0 {
 				tt.args.factory.On("Build", tt.args.filterArray[0], mock.Anything, tt.args.kube).Return(nil, nil)
 			}
-			filter.NewService(tt.args.factory, tt.args.filterArray, tt.args.kube)
+			filter.NewService(tt.args.factory, tt.args.filterArray, tt.args.kube, l)
 			tt.args.factory.AssertNumberOfCalls(t, "Build", tt.callCount)
 		})
 	}
@@ -174,7 +176,8 @@ func TestIsFiltersMatched(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := filter.IsFiltersMatched(tt.args.getServiceFn(), tt.args.requiredFilters, tt.args.data)
+			l := logger.New(nil)
+			got := filter.IsFiltersMatched(tt.args.getServiceFn(), tt.args.requiredFilters, tt.args.data, l)
 			if got != tt.want {
 				t.Errorf("IsFiltersMatched() = %v, want %v", got, tt.want)
 			}
@@ -235,10 +238,11 @@ func Test_dal_GetFilterByName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			l := logger.New(nil)
 			want := tt.want(tt.args.name)
 			factoryMock := tt.getFactory(want)
 			filterArray := tt.getFilterJSONArray()
-			d := filter.NewService(factoryMock, filterArray, &kubeMock.Kube{})
+			d := filter.NewService(factoryMock, filterArray, &kubeMock.Kube{}, l)
 			got, err := d.GetFilterByName(tt.args.name)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("dal.GetFilterByName() error = %v, wantErr %v", err, tt.wantErr)

@@ -16,14 +16,19 @@ type (
 )
 
 func New(opt *Options) Logger {
-	l := log.New(log.Ctx{
-		"Command": opt.Command,
-	})
-	handlers := []log.Handler{}
+	var l Logger
 	lvl := log.LvlError
-	if opt.Verbose {
-		lvl = log.LvlDebug
+	if opt != nil {
+		l = log.New(log.Ctx{
+			"Command": opt.Command,
+		})
+		if opt.Verbose {
+			lvl = log.LvlDebug
+		}
+	} else {
+		l = log.New()
 	}
+	handlers := []log.Handler{}
 	verboseHandler := log.LvlFilterHandler(lvl, log.StdoutHandler)
 	handlers = append(handlers, verboseHandler)
 	l.SetHandler(log.MultiHandler(handlers...))
