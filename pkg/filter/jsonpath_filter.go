@@ -40,6 +40,7 @@ func applyRegexpFilter(pattern string, value string, logger logger.Logger) (bool
 		return false, err
 	}
 	if match == false {
+		logger.Debug("JSON path does not match to regex", "pattern", pattern, "value", value)
 		return false, nil
 	}
 	logger.Debug("JSON path match to regex", "pattern", pattern, "value", value)
@@ -48,6 +49,7 @@ func applyRegexpFilter(pattern string, value string, logger logger.Logger) (bool
 
 func applyMatchValueFilter(requiredValue string, actualValue string, logger logger.Logger) bool {
 	if actualValue != requiredValue {
+		logger.Debug("JSON path does not match", "requiredValue", requiredValue, "actualValue", actualValue)
 		return false
 	}
 	logger.Debug("JSON path match", "requiredValue", requiredValue, "actualValue", actualValue)

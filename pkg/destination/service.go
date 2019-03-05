@@ -5,7 +5,6 @@ import (
 
 	"github.com/olegsu/iris/pkg/kube"
 	"github.com/olegsu/iris/pkg/logger"
-	"github.com/olegsu/iris/pkg/util"
 )
 
 var d *dal
@@ -51,11 +50,11 @@ func NewService(destinationArray []map[string]interface{}, k kube.Kube, logger l
 	return tempDal
 }
 
-func Exec(serivce Service, names []string, payload interface{}) {
+func Exec(serivce Service, names []string, payload interface{}, logger logger.Logger) {
 	for _, name := range names {
 		dest, err := serivce.GetDestinationByName(name)
 		if err != nil {
-			util.EchoError(err)
+			logger.Error("Error", "err", err.Error())
 		} else {
 			dest.Exec(payload)
 		}

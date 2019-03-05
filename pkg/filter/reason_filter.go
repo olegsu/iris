@@ -8,8 +8,9 @@ type reasonFilter struct {
 func (f *reasonFilter) Apply(data interface{}) (bool, error) {
 	jsonFilter := &jsonPathFilter{
 		baseFilter: baseFilter{
-			Name: f.GetName(),
-			Type: f.GetType(),
+			Name:   f.GetName(),
+			Type:   f.GetType(),
+			logger: f.logger,
 		},
 		Path:  "$.reason",
 		Value: f.Reason,

@@ -26,10 +26,10 @@ func (i *Integration) Exec(obj interface{}) (bool, error) {
 	}
 	json.Unmarshal(bytes, &j)
 	result := true
-	result = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j)
+	result = filter.IsFiltersMatched(GetDal().FilterService, i.Filters, j, i.logger)
 	if result == true {
 		i.logger.Debug("All checks are passed, executing", "name", i.Name)
-		destination.Exec(GetDal().DestinationService, i.Destinations, obj)
+		destination.Exec(GetDal().DestinationService, i.Destinations, obj, i.logger)
 	}
 	return false, nil
 }
