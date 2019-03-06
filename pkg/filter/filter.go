@@ -1,5 +1,9 @@
 package filter
 
+import (
+	"github.com/olegsu/iris/pkg/logger"
+)
+
 const (
 	TypeReason    = "reason"
 	TypeNamespace = "namespace"
@@ -19,8 +23,9 @@ func ApplyFilter(f Filter, obj interface{}) (bool, error) {
 }
 
 type baseFilter struct {
-	Name string `yaml:"name"`
-	Type string `yaml:"type"`
+	Name   string `yaml:"name"`
+	Type   string `yaml:"type"`
+	logger logger.Logger
 }
 
 func (f *baseFilter) GetName() string {

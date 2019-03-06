@@ -7,6 +7,7 @@ import (
 	"github.com/olegsu/iris/pkg/filter"
 	"github.com/olegsu/iris/pkg/filter/mocks"
 	kube "github.com/olegsu/iris/pkg/kube/mocks"
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -110,7 +111,8 @@ func Test_f_Build(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			factory := filter.NewFactory()
+			l := logger.New(nil)
+			factory := filter.NewFactory(l)
 			got, err := factory.Build(tt.buildJSONArg(), &mocks.Service{}, &kube.Kube{})
 			assert.Equalf(t, tt.wantErr, err != nil, "f.Build() error = %v, wantErr %v", err, tt.wantErr)
 

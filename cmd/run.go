@@ -34,10 +34,13 @@ var runCmd = &cobra.Command{
 	Use:  "run",
 	Long: "Start the server",
 	Run: func(cmd *cobra.Command, args []string) {
+		logger := buildLogger("run")
 		if runCmdOptions.kube == "" {
-			runCmdOptions.kube = fmt.Sprintf("%s/.kube/config", os.Getenv("HOME"))
+			path := fmt.Sprintf("%s/.kube/config", os.Getenv("HOME"))
+			logger.Debug("Path to kubeconfig not set, using default", "path", path)
+			runCmdOptions.kube = path
 		}
-		config := app.NewApplicationOptions(runCmdOptions.file, runCmdOptions.kube, runCmdOptions.inCluster)
+		config := app.NewApplicationOptions(runCmdOptions.file, runCmdOptions.kube, runCmdOptions.inCluster, logger)
 		app.CreateApp(config)
 	},
 }

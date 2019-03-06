@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/olegsu/iris/pkg/filter"
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/stretchr/testify/assert"
 
 	mocks "github.com/olegsu/iris/pkg/filter/mocks"
@@ -32,7 +33,7 @@ func Test_Filter_Apply(t *testing.T) {
 			name:       "Should success when at least one inner filter is success",
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				mockedFactory := &mocks.Factory{}
 				service := &mocks.Service{}
@@ -60,7 +61,7 @@ func Test_Filter_Apply(t *testing.T) {
 			name:       "Should fail when GetFilterByName returns an error",
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -79,7 +80,7 @@ func Test_Filter_Apply(t *testing.T) {
 			name:       "Should fail when filter.Apply returns an error",
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				mockedFactory := &mocks.Factory{}
 				service := &mocks.Service{}
@@ -103,7 +104,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -126,7 +127,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -149,7 +150,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -170,7 +171,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -193,7 +194,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -216,7 +217,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -235,7 +236,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -258,7 +259,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeJSONPath,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -279,7 +280,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeNamespace,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -304,7 +305,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeNamespace,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -329,7 +330,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeReason,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -352,7 +353,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeReason,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 
@@ -375,7 +376,7 @@ func Test_Filter_Apply(t *testing.T) {
 			filterType: filter.TypeLabel,
 			getFilter: func(t string) filter.Filter {
 				// build the actual tested filter
-				factory := filter.NewFactory()
+				factory := filter.NewFactory(logger.New(nil))
 
 				service := &mocks.Service{}
 				kube := &kubeMock.Kube{}

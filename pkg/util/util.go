@@ -4,26 +4,28 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/olegsu/iris/pkg/logger"
+
 	yaml "gopkg.in/yaml.v2"
 )
 
-func UnmarshalOrDie(in []byte, out interface{}) {
+func UnmarshalOrDie(in []byte, out interface{}, logger logger.Logger) {
 	err := yaml.Unmarshal(in, out)
 	if err != nil {
-		fmt.Printf("Failed to unmarshal with error: %s", err.Error())
+		logger.Error("Failed to unmarshal", "err", err.Error())
 		os.Exit(1)
 	}
 }
 
-func MapToObjectOrDie(m map[string]interface{}, o interface{}) {
+func MapToObjectOrDie(m map[string]interface{}, o interface{}, logger logger.Logger) {
 	b, err := yaml.Marshal(m)
 	if err != nil {
-		fmt.Printf("Failed to marshal with error: %s", err.Error())
+		logger.Error("Failed to marshal", "err", err.Error())
 		os.Exit(1)
 	}
 	err = yaml.Unmarshal(b, o)
 	if err != nil {
-		fmt.Printf("Failed to unmarshal with error: %s", err.Error())
+		logger.Error("Failed to unmarshal", "err", err.Error())
 		os.Exit(1)
 	}
 }

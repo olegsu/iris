@@ -4,11 +4,12 @@ import (
 	"fmt"
 
 	"github.com/olegsu/iris/pkg/kube"
-	"github.com/olegsu/iris/pkg/util"
+	"github.com/olegsu/iris/pkg/logger"
 )
 
 type dal struct {
 	filters []Filter
+	logger  logger.Logger
 }
 
 // Service is the service of the filter package
@@ -32,9 +33,10 @@ func (d *dal) GetFilterByName(name string) (Filter, error) {
 }
 
 // NewService - creates net Dal from json array of filters
-func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Kube) Service {
+func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Kube, logger logger.Logger) Service {
 	tempDal := &dal{
 		filters: []Filter{},
+		logger:  logger,
 	}
 	for _, json := range filterArray {
 		f, _ := factory.Build(json, tempDal, k)
@@ -45,18 +47,18 @@ func NewService(factory Factory, filterArray []map[string]interface{}, k kube.Ku
 
 // IsFiltersMatched Go over all filters and apply each one on on data
 // Return true is the data matched to all the filters
-func IsFiltersMatched(service Service, requiredFilters []string, data interface{}) bool {
+func IsFiltersMatched(service Service, requiredFilters []string, data interface{}, logger logger.Logger) bool {
 	matched := true
 	for _, f := range requiredFilters {
 		var res bool
 		filter, err := service.GetFilterByName(f)
 		if err != nil {
-			util.EchoError(err)
+			logger.Error("Error", "err", err.Error())
 			matched = false
 		} else {
 			res, err = filter.Apply(data)
 			if err != nil {
-				util.EchoError(err)
+				logger.Error("Error", "err", err.Error())
 				matched = false
 			}
 			if res == false {

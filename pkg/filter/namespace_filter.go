@@ -8,8 +8,9 @@ type namespaceFilter struct {
 func (f *namespaceFilter) Apply(data interface{}) (bool, error) {
 	jsonFilter := &jsonPathFilter{
 		baseFilter: baseFilter{
-			Name: f.GetName(),
-			Type: f.GetType(),
+			Name:   f.GetName(),
+			Type:   f.GetType(),
+			logger: f.logger,
 		},
 		Path:  "$.metadata.namespace",
 		Value: f.Namespace,

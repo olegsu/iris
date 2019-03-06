@@ -5,6 +5,7 @@ require (
 	github.com/ghodss/yaml v0.0.0-20150909031657-73d445a93680 // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v0.0.0-20170702092826-d459835d2b07
+	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gogo/protobuf v0.0.0-20170330071051-c0656edd0d9e // indirect
 	github.com/golang/glog v0.0.0-20141105023935-44145f04b68c // indirect
 	github.com/golang/groupcache v0.0.0-20181024230925-c65c006176ff // indirect
@@ -15,9 +16,10 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20170728041850-787624de3eb7 // indirect
 	github.com/hashicorp/golang-lru v0.0.0-20160207214719-a0d98a5f2880 // indirect
 	github.com/imdario/mergo v0.0.0-20141206190957-6633656539c1 // indirect
+	github.com/inconshreveable/log15 v0.0.0-20180818164646-67afb5ed74ec
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/json-iterator/go v0.0.0-20180612202835-f2b4162afba3 // indirect
-	github.com/mattn/go-isatty v0.0.4 // indirect
+	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180320133207-05fbef0ca5da // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect

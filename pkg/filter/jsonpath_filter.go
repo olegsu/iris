@@ -1,9 +1,9 @@
 package filter
 
 import (
-	"fmt"
 	"regexp"
 
+	"github.com/olegsu/iris/pkg/logger"
 	"github.com/yalp/jsonpath"
 )
 
@@ -21,10 +21,10 @@ func (f *jsonPathFilter) Apply(data interface{}) (bool, error) {
 		return false, err
 	}
 	if f.Value != "" {
-		res := applyMatchValueFilter(f.Value, actualValue.(string))
+		res := applyMatchValueFilter(f.Value, actualValue.(string), f.logger)
 		return res, nil
 	} else if f.Regexp != "" {
-		res, err := applyRegexpFilter(f.Regexp, actualValue.(string))
+		res, err := applyRegexpFilter(f.Regexp, actualValue.(string), f.logger)
 		if err != nil {
 			return false, err
 		}
@@ -34,22 +34,24 @@ func (f *jsonPathFilter) Apply(data interface{}) (bool, error) {
 	}
 }
 
-func applyRegexpFilter(pattern string, value string) (bool, error) {
+func applyRegexpFilter(pattern string, value string, logger logger.Logger) (bool, error) {
 	match, err := regexp.MatchString(pattern, value)
 	if err != nil {
 		return false, err
 	}
 	if match == false {
+		logger.Debug("JSON path does not match to regex", "pattern", pattern, "value", value)
 		return false, nil
 	}
-	fmt.Printf("JSON path match regex %s == %s\n", pattern, value)
+	logger.Debug("JSON path match to regex", "pattern", pattern, "value", value)
 	return true, nil
 }
 
-func applyMatchValueFilter(requiredValue string, actualValue string) bool {
+func applyMatchValueFilter(requiredValue string, actualValue string, logger logger.Logger) bool {
 	if actualValue != requiredValue {
+		logger.Debug("JSON path does not match", "requiredValue", requiredValue, "actualValue", actualValue)
 		return false
 	}
-	fmt.Printf("JSON path match %s == %s\n", requiredValue, actualValue)
+	logger.Debug("JSON path match", "requiredValue", requiredValue, "actualValue", actualValue)
 	return true
 }
