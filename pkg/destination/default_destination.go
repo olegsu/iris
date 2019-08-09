@@ -33,6 +33,7 @@ func (d *defaultDestination) Exec(payload interface{}) {
 	req, _ := http.NewRequest("POST", d.URL, contentReader)
 	req.Header.Set("X-IRIS-HMAC", getHmac(d.Secret, mJSON))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", UserAgent)
 	client := &http.Client{}
 	client.Do(req)
 }
