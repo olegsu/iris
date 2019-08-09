@@ -13,6 +13,7 @@ type defaultDestination struct {
 	baseDestination `yaml:",inline"`
 	URL             string `yaml:"url"`
 	Secret          string `yaml:"secret"`
+	Headers         map[string]string `yaml:"headers"`
 }
 
 func getHmac(secret string, payload []byte) string {
@@ -34,6 +35,9 @@ func (d *defaultDestination) Exec(payload interface{}) {
 	req.Header.Set("X-IRIS-HMAC", getHmac(d.Secret, mJSON))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", UserAgent)
+	for k, v := range d.Headers {
+		req.Header.Set(k, v)
+	}
 	client := &http.Client{}
 	client.Do(req)
 }
