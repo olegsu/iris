@@ -52,7 +52,7 @@ func init() {
 
 	viper.BindEnv("kube", "KUBECONFIG")
 
-	viper.BindEnv("inCluster", "KUBECONFIG")
+	viper.BindEnv("inCluster", "IRIS_IN_CLUSTER")
 
 	runCmd.Flags().StringVar(&runCmdOptions.file, "iris-file", viper.GetString("file"), "Iris yaml config file [$IRIS_FILE]")
 	runCmd.Flags().StringVar(&runCmdOptions.kube, "kube-config", viper.GetString("kube"), "Path to kube-config file (default is ~/.kube/config) [$KUBECONFIG]")
