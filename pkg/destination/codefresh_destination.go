@@ -46,7 +46,7 @@ func (d *codefreshDestination) Exec(payload interface{}) {
 	d.logger.Debug("Executing Codefresh destination\n")
 	req, _ := http.NewRequest("POST", url, contentReader)
 	req.Header.Set("authorization", d.CFToken)
-	req.Header.Set("User-Agent", "IRIS")
+	req.Header.Set("User-Agent", UserAgent)
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, _ := client.Do(req)
