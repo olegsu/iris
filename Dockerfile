@@ -1,10 +1,8 @@
 FROM alpine:3.8
 
-RUN apk add --update ca-certificates
+RUN apk --no-cache add --update ca-certificates
 
 COPY dist/iris_linux_386/iris /usr/local/bin/
-COPY hack/docker_entrypoint.sh /entrypoint.sh
-COPY VERSION /VERSION
 
-ENTRYPOINT ["sh", "entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/iris"]
 CMD [ "--help" ]

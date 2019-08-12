@@ -9,6 +9,10 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+var (
+	BuildVersion, BuildDate, BuildCommit, BuildBy string
+)
+
 func UnmarshalOrDie(in []byte, out interface{}, logger logger.Logger) {
 	err := yaml.Unmarshal(in, out)
 	if err != nil {

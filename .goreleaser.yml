@@ -5,6 +5,13 @@ builds:
     - darwin
     - linux
     - windows
+  ldflags:
+    - -s -w
+    - -X 'github.com/olegsu/iris/pkg/util.BuildVersion={{.Version}}'
+    - -X 'github.com/olegsu/iris/pkg/util.BuildDate={{.Date}}'
+    - -X 'github.com/olegsu/iris/pkg/util.BuildCommit={{.ShortCommit}}'
+    - -X 'github.com/olegsu/iris/pkg/util.BuildBy=goreleaser'
+
 archive:
   replacements:
     darwin: Darwin

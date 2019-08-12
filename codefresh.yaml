@@ -4,16 +4,18 @@ stages:
 - Integration
 - Delivery
 
+
 steps:
 
   Prepare:
-    title: Update Helm package version  
+    title: Update Helm package version
     image: alpine:3.8
     stage: Integration
     commands:
     - apk add --no-cache curl jq python py-pip
     - pip install yq
     - sh ${{CF_VOLUME_PATH}}/iris/hack/.codefresh/push-helm.sh
+      # ^-- cfexports IRIS_VERSION from VERSION file
 
   Test:
     title: Run unit test
@@ -21,15 +23,15 @@ steps:
     stage: Integration
     commands:
     - make test
-    
+
   PushingHelmChart:
-    title: Push Helm package to repo  
+    title: Push Helm package to repo
     stage: Delivery
     image: codefresh/cfstep-helm:2.9.0
     environment:
     - ACTION=push
     - CHART_REF=iris
-    
+
   CreatingGitTag:
     title: Push tag to git
     image: codefresh/cli
@@ -44,7 +46,7 @@ steps:
       branch:
         only:
         - master
-  
+
   Releasing:
     image: goreleaser/goreleaser
     stage: Delivery
@@ -56,7 +58,7 @@ steps:
       branch:
         only:
         - master
-  
+
   BuildBinaries:
     image: goreleaser/goreleaser
     stage: Delivery
@@ -86,7 +88,7 @@ steps:
     - ${{CF_BRANCH_TAG_NORMALIZED}}
     - ${{IRIS_VERSION}}
     registry: dockerhub
-    
+
   PushingToDockerRegistryLatest:
     title: Pushing to Docker Registry
     type: push

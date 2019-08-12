@@ -15,7 +15,7 @@ package cmd
 // limitations under the License.
 
 import (
-	"os"
+	"github.com/olegsu/iris/pkg/util"
 
 	"github.com/spf13/cobra"
 )
@@ -27,7 +27,7 @@ var rootCmdOptions struct {
 var rootCmd = &cobra.Command{
 	Use:     "iris",
 	Long:    "Watch on Kubernetes events, filter and send them as standard wehbook to any system",
-	Version: os.Getenv("IRIS_VERSION"),
+	Version: util.BuildVersion,
 }
 
 // Execute - execute the root command
