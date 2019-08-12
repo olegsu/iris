@@ -4,7 +4,6 @@ import (
 	"github.com/olegsu/iris/pkg/kube"
 	"github.com/olegsu/iris/pkg/logger"
 	"github.com/olegsu/iris/pkg/util"
-	"os"
 )
 
 const (
@@ -13,7 +12,7 @@ const (
 )
 
 var (
-	UserAgent = "iris/" + os.Getenv("IRIS_VERSION")
+	UserAgent = "iris/" + util.BuildVersion
 )
 
 type Destination interface {
