@@ -3,13 +3,14 @@ set -e
 
 OUTFILE=${1:-/usr/local/bin/irisctl}
 BUILD_DATE=$(date)
-BUILD_VERSION=$(cat VERSION)
 GIT_TAG=$(git describe --tags)
+GIT_COMMIT=$(git rev-parse --short HEAD)
 
-LDFLAGS="
- -X 'github.com/olegsu/iris/pkg/util.GitTag=${GIT_TAG}'
- -X 'github.com/olegsu/iris/pkg/util.BuildVersion=${BUILD_VERSION}'
+LDFLAGS="-s -w
+ -X 'github.com/olegsu/iris/pkg/util.BuildVersion=${GIT_TAG}'
  -X 'github.com/olegsu/iris/pkg/util.BuildDate=${BUILD_DATE}'
+ -X 'github.com/olegsu/iris/pkg/util.BuildCommit=${GIT_COMMIT}'
+ -X 'github.com/olegsu/iris/pkg/util.BuildBy=Makefile'
 "
-# echo $LDFLAGS
+
 go build -ldflags "$LDFLAGS" -o "$OUTFILE" main.go

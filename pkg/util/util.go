@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	BuildVersion, BuildDate, GitTag string
+	BuildVersion, BuildDate, BuildCommit, BuildBy string
 )
 
 func UnmarshalOrDie(in []byte, out interface{}, logger logger.Logger) {
