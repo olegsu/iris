@@ -11,9 +11,13 @@ require (
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v0.0.0-20170702092826-d459835d2b07
 	github.com/go-stack/stack v1.8.0 // indirect
+	github.com/gogo/protobuf v1.3.0 // indirect
 	github.com/golang/groupcache v0.0.0-20181024230925-c65c006176ff // indirect
+	github.com/google/uuid v1.1.1 // indirect
+	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/gosimple/slug v1.7.0 // indirect
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect
+	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/hairyhenderson/gomplate v3.5.0+incompatible
 	github.com/hairyhenderson/toml v0.3.0 // indirect
 	github.com/hashicorp/consul/api v1.2.0 // indirect
@@ -21,8 +25,10 @@ require (
 	github.com/imdario/mergo v0.3.7
 	github.com/inconshreveable/log15 v0.0.0-20180818164646-67afb5ed74ec
 	github.com/joho/godotenv v1.3.0 // indirect
+	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mattn/go-isatty v0.0.9 // indirect
+	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190731233626-505e41936337 // indirect
 	github.com/spf13/cobra v0.0.5
@@ -33,12 +39,12 @@ require (
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	gopkg.in/hairyhenderson/yaml.v2 v2.0.0-00010101000000-000000000000 // indirect
+	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.2.2
 	gotest.tools v2.2.0+incompatible // indirect
-	k8s.io/api v0.0.0-20190905160310-fb749d2f1064
-	k8s.io/apimachinery v0.0.0-20190831074630-461753078381
-	k8s.io/client-go v11.0.0+incompatible
-	k8s.io/utils v0.0.0-20190829053155-3a4a5477acf8 // indirect
+	k8s.io/api v0.0.0-20180628040859-072894a440bd
+	k8s.io/apimachinery v0.0.0-20180621070125-103fd098999d
+	k8s.io/client-go v8.0.0+incompatible
 )
 
 replace gopkg.in/hairyhenderson/yaml.v2 => github.com/maxaudron/yaml v0.0.0-20190411130442-27c13492fe3c
