@@ -91,7 +91,7 @@ filters:
 ```
 
 ### JSONPath
-With JSONPath gives the ability to match any field from [Kubernetes event](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L4501).
+With JSONPath gives the ability to match any field from [Kubernetes event](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L5478).
 The value from the fields can be matched to exec value using `value: {{value}}` or matched by regex using `regexp: {{regexp}}`
 ```yaml
 filters:
