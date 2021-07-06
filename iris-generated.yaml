@@ -1,0 +1,19 @@
+filters:
+  - name: MatchDefaultNamespace
+    type: namespace
+    namespace: default
+  - name: MatchPodKind
+    type: jsonpath
+    path: $.involvedObject.kind
+    value: Pod
+
+destinations:
+  - name: prod
+    url: http://localhost:8080/e4bf9aa0-b1d6-449d-b17d-a114780b8dec
+integrations:
+  - name: Report
+    destinations: 
+    - prod
+    filters:
+    - MatchPodKind
+    - MatchDefaultNamespace

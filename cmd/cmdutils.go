@@ -17,8 +17,16 @@ package cmd
 import (
 	"fmt"
 	"os"
-
+	"bytes"
+	"io/ioutil"
+	"io"
+	"encoding/json"
+	"github.com/ghodss/yaml"
 	"github.com/olegsu/iris/pkg/logger"
+)
+
+type (
+	JSON map[string]interface{}
 )
 
 func dieOnError(err error) {
@@ -33,4 +41,18 @@ func buildLogger(cmd string) logger.Logger {
 		Command: cmd,
 		Verbose: true,
 	})
+}
+
+func jsonToYaml(j io.Reader) (io.Reader, error) {
+	buf, err := ioutil.ReadAll(j)
+	if err != nil {
+		return nil, err
+	}
+	js := &JSON{}
+	err = json.Unmarshal(buf, js)
+	if err != nil {
+		return nil, err
+	}
+	b, err := yaml.Marshal(js)
+	return bytes.NewReader(b), nil
 }

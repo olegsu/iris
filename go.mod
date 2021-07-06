@@ -1,41 +1,50 @@
 module github.com/olegsu/iris
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/ghodss/yaml v0.0.0-20150909031657-73d445a93680 // indirect
+	github.com/Masterminds/goutils v1.1.0 // indirect
+	github.com/Shopify/ejson v1.2.1 // indirect
+	github.com/aws/aws-sdk-go v1.23.17 // indirect
+	github.com/boltdb/bolt v1.3.1 // indirect
+	github.com/docker/libkv v0.2.1 // indirect
+	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
+	github.com/ghodss/yaml v1.0.0
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v0.0.0-20170702092826-d459835d2b07
 	github.com/go-stack/stack v1.8.0 // indirect
-	github.com/gogo/protobuf v0.0.0-20170330071051-c0656edd0d9e // indirect
-	github.com/golang/glog v0.0.0-20141105023935-44145f04b68c // indirect
+	github.com/gogo/protobuf v1.3.0 // indirect
 	github.com/golang/groupcache v0.0.0-20181024230925-c65c006176ff // indirect
-	github.com/golang/protobuf v1.1.0 // indirect
-	github.com/google/btree v0.0.0-20160524151835-7d79101e329e // indirect
-	github.com/google/gofuzz v0.0.0-20161122191042-44d81051d367 // indirect
-	github.com/googleapis/gnostic v0.0.0-20170729233727-0c5108395e2d // indirect
-	github.com/gregjones/httpcache v0.0.0-20170728041850-787624de3eb7 // indirect
-	github.com/hashicorp/golang-lru v0.0.0-20160207214719-a0d98a5f2880 // indirect
-	github.com/imdario/mergo v0.0.0-20141206190957-6633656539c1 // indirect
+	github.com/google/uuid v1.1.1 // indirect
+	github.com/googleapis/gnostic v0.3.1 // indirect
+	github.com/gosimple/slug v1.7.0 // indirect
+	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect
+	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
+	github.com/hairyhenderson/gomplate v3.5.0+incompatible
+	github.com/hairyhenderson/toml v0.3.0 // indirect
+	github.com/hashicorp/consul/api v1.2.0 // indirect
+	github.com/hashicorp/vault/api v1.0.4 // indirect
+	github.com/imdario/mergo v0.3.7
 	github.com/inconshreveable/log15 v0.0.0-20180818164646-67afb5ed74ec
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/json-iterator/go v0.0.0-20180612202835-f2b4162afba3 // indirect
-	github.com/mattn/go-colorable v0.1.1 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v0.0.0-20180320133207-05fbef0ca5da // indirect
+	github.com/joho/godotenv v1.3.0 // indirect
+	github.com/json-iterator/go v1.1.7 // indirect
+	github.com/mattn/go-colorable v0.1.2 // indirect
+	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
-	github.com/spf13/cobra v0.0.3
-	github.com/spf13/viper v1.3.1
-	github.com/stretchr/testify v1.3.0
+	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
+	github.com/smartystreets/goconvey v0.0.0-20190731233626-505e41936337 // indirect
+	github.com/spf13/cobra v0.0.5
+	github.com/spf13/viper v1.3.2
+	github.com/stretchr/testify v1.4.0
 	github.com/yalp/jsonpath v0.0.0-20180802001716-5cc68e5049a0
-	golang.org/x/net v0.0.0-20170809000501-1c05540f6879 // indirect
-	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
-	golang.org/x/time v0.0.0-20161028155119-f51c12702a4d // indirect
+	github.com/zealic/xignore v0.3.3 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
-	gopkg.in/inf.v0 v0.9.0 // indirect
-	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
+	gopkg.in/hairyhenderson/yaml.v2 v2.0.0-00010101000000-000000000000 // indirect
+	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.2.2
+	gotest.tools v2.2.0+incompatible // indirect
 	k8s.io/api v0.0.0-20180628040859-072894a440bd
 	k8s.io/apimachinery v0.0.0-20180621070125-103fd098999d
 	k8s.io/client-go v8.0.0+incompatible
 )
+
+replace gopkg.in/hairyhenderson/yaml.v2 => github.com/maxaudron/yaml v0.0.0-20190411130442-27c13492fe3c
