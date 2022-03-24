@@ -2,27 +2,25 @@
 
 <img src="https://github.com/olegsu/iris/raw/master/Iris.jpg" width="200" align="right">
 
-[![Codefresh build status]( https://g.codefresh.io/api/badges/pipeline/olegs-codefresh/olegsu%2Firis%2Firis?branch=master&type=cf-2)]( https://g.codefresh.io/repositories/olegsu/iris/builds?filter=trigger:build;branch:master;service:5b69b8145904b871b671a6cf~iris)
 [![Go Report Card](https://goreportcard.com/badge/github.com/olegsu/iris)](https://goreportcard.com/report/github.com/olegsu/iris)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/kube-iris/Lobby)
 [![codecov](https://codecov.io/gh/olegsu/iris/branch/master/graph/badge.svg)](https://codecov.io/gh/olegsu/iris)
 
 <sub>**_In Greek mythology, Iris is the personification of the rainbow and messenger of the gods._**</sub>
 
 - [IRIS](#iris)
-    - [Run in cluster](#run-in-cluster)
-        - [Using Helm](#using-helm)
-    - [Build](#build)
-    - [Filters](#filters)
-        - [Reason](#reason)
-        - [Namespace](#namespace)
-        - [JSONPath](#jsonpath)
-        - [Labels](#labels)
-        - [Any](#any)
-    - [Destinations](#destinations)
-        - [Default](#default)
-        - [Codefresh](#codefresh)
-    - [Integrations](#integrations)
+  - [Run in cluster](#run-in-cluster)
+    - [Using Helm](#using-helm)
+  - [Build](#build)
+  - [Filters](#filters)
+    - [Reason](#reason)
+    - [Namespace](#namespace)
+    - [JSONPath](#jsonpath)
+    - [Labels](#labels)
+    - [Any](#any)
+  - [Destinations](#destinations)
+    - [Default](#default)
+    - [Codefresh](#codefresh)
+  - [Integrations](#integrations)
 
 Easily configure webhooks on Kubernetes events using highly customizable filters
 
